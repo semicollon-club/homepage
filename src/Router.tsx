@@ -3,6 +3,7 @@ import App from './App'
 import Layout from './layouts/Layout'
 import NotFoundPage from './pages/NotFoundPage'
 import OrganizationPage from './pages/OrganizationPage'
+import RecruitPage from './pages/RecruitPage'
 import { LOCATION_CHANGE_EVENT } from './lib/navigation'
 
 const SITE_NAME = '세미콜론 ; 청운대학교 코딩 동아리'
@@ -16,6 +17,7 @@ interface Route {
 const routes: Record<string, Route> = {
   '/': { Component: App, title: SITE_NAME },
   '/organization': { Component: OrganizationPage, title: `조직도 | ${SITE_NAME}` },
+  '/recruit': { Component: RecruitPage, title: `지원 안내 | ${SITE_NAME}` },
 }
 
 const getLocationKey = () => window.location.pathname + window.location.hash

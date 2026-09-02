@@ -22,7 +22,7 @@ function Layout({ children }: { children: ReactNode }) {
           {menuLinks.map((item) => (
             <Link key={item.to} to={item.to} onClick={closeMenu}>{item.label}</Link>
           ))}
-          <Link className="nav-cta" to="/#apply" onClick={closeMenu}>지원하기 <span>↗</span></Link>
+          <Link className="nav-cta" to="/recruit" onClick={closeMenu}>지원하기 <span>↗</span></Link>
         </div>
       </nav>
 
