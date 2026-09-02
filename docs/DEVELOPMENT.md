@@ -54,3 +54,16 @@ npm run lint
   `Remove-Item -Recurse -Force node_modules, package-lock.json; npm install`).
 - **포트 충돌**: 5173 포트가 사용 중이면 Vite가 자동으로 다른 포트를 잡거나,
   `npm run dev -- --port 3000`으로 지정할 수 있습니다.
+
+## 백엔드 연동 (로그인 기능 로컬 개발)
+
+프론트만 개발할 때는 이 절이 필요 없습니다. 로그인·회원 기능까지 로컬에서 확인하려면:
+
+1. [semicollon-club/asahi](https://github.com/semicollon-club/asahi) 저장소의 `server/`를 로컬로 실행 (`server/README.md` 참조, dev DB 접속 정보는 운영진에게)
+2. 이 저장소 루트에 `.env.local` 생성:
+
+```
+VITE_API_URL=http://localhost:8788
+```
+
+기본값(미설정)은 실서비스 API `https://api.semicollon.com`를 바라보지만, localhost origin은 CORS로 차단되어 로그인은 동작하지 않습니다 — UI 확인용으로만 쓰세요.
