@@ -11,23 +11,10 @@ const programs = [
 ]
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const scrollToApply = () => document.querySelector('#apply')?.scrollIntoView({ behavior: 'smooth' })
 
-  return <div className="site-shell">
-    <nav className="nav" aria-label="주 메뉴">
-      <a className="logo" href="#top" aria-label="세미콜론 처음으로"><span>;</span> SEMICOLON</a>
-      <button className="mobile-menu" aria-label="메뉴 열기" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? '×' : '☰'}</button>
-      <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
-        <a href="#about" onClick={() => setMenuOpen(false)}>세미콜론 소개</a>
-        <a href="#program" onClick={() => setMenuOpen(false)}>우리가 하는 일</a>
-        <a href="#process" onClick={() => setMenuOpen(false)}>지원 안내</a>
-        <button className="nav-cta" onClick={scrollToApply}>지원하기 <span>↗</span></button>
-      </div>
-    </nav>
-
-    <main id="top">
+  return <main id="top">
       <section className="hero">
         <div className="hero-grid" aria-hidden="true" />
         <p className="kicker"><i /> 2026 청운대학교 교내 코딩 동아리</p>
@@ -59,8 +46,6 @@ function App() {
 
       <section className="faq section"><div className="section-label">04 / FAQ</div><h2>궁금한 점이 있나요?</h2>{['개발 경험이 없어도 지원할 수 있나요?', '비전공자도 참여할 수 있나요?', '어떤 활동을 주로 하나요?'].map((question, index) => <div className="faq-item" key={question}><button onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}><span>0{index + 1}</span>{question}<b>{openFaq === index ? '−' : '+'}</b></button>{openFaq === index && <p>{index === 0 ? '물론입니다. 배우려는 마음과 함께할 의지만 있다면 세미콜론이 첫걸음을 함께할게요.' : index === 1 ? '네, 전공과 무관하게 새로운 것을 만들고 싶은 청운대학교 학생이라면 누구나 환영합니다.' : '함께 공부하는 스터디부터 팀 프로젝트, 데모데이와 교류 활동까지 다양하게 이어집니다.'}</p>}</div>)}</section>
     </main>
-    <footer><a className="logo" href="#top"><span>;</span> SEMICOLON</a><p>청운대학교 교내 코딩 동아리 세미콜론</p><p>© 2026 SEMICOLON. ALL RIGHTS RESERVED.</p></footer>
-  </div>
 }
 
 export default App
