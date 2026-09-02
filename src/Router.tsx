@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import App from './App'
 import Layout from './layouts/Layout'
+import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import OrganizationPage from './pages/OrganizationPage'
 import RecruitPage from './pages/RecruitPage'
@@ -18,6 +19,7 @@ const routes: Record<string, Route> = {
   '/': { Component: App, title: SITE_NAME },
   '/organization': { Component: OrganizationPage, title: `조직도 | ${SITE_NAME}` },
   '/recruit': { Component: RecruitPage, title: `지원 안내 | ${SITE_NAME}` },
+  '/login': { Component: LoginPage, title: `로그인 | ${SITE_NAME}` },
 }
 
 const getLocationKey = () => window.location.pathname + window.location.hash

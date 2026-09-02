@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import Link from '../components/Link'
+import { useAuth } from '../hooks/useAuth'
 import './Layout.css'
 
 const menuLinks = [
@@ -12,6 +13,7 @@ const menuLinks = [
 function Layout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const closeMenu = () => setMenuOpen(false)
+  const { user, loading, logout } = useAuth()
 
   return (
     <div className="site-shell">
@@ -21,6 +23,14 @@ function Layout({ children }: { children: ReactNode }) {
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
           {menuLinks.map((item) => (
             <Link key={item.to} to={item.to} onClick={closeMenu}>{item.label}</Link>
+          ))}
+          {!loading && (user ? (
+            <span className="nav-user">
+              <b>{user.displayName}</b>님
+              <button className="nav-logout" onClick={() => { void logout(); closeMenu() }}>로그아웃</button>
+            </span>
+          ) : (
+            <Link to="/login" onClick={closeMenu}>로그인</Link>
           ))}
           <Link className="nav-cta" to="/recruit" onClick={closeMenu}>지원하기 <span>↗</span></Link>
         </div>
