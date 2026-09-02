@@ -31,13 +31,23 @@ react-router가 아니라 **자체 구현 라우터**를 사용합니다:
 
 **새 페이지 추가 절차**: `src/pages/`에 컴포넌트+CSS 생성 → `Router.tsx`의 `routes`에 등록 → 필요한 곳에 `<Link>` 추가. 상세는 `docs/ARCHITECTURE.md` 참조.
 
+## 백엔드 연동 — 로그인·API 호출 규칙
+
+백엔드(web-api)는 별도 저장소 semicollon-club/asahi의 `server/`에 있습니다. 이 저장소에서는 **호출만** 합니다.
+
+- API 호출은 반드시 `src/lib/api.ts` 경유 — 직접 `fetch`를 쓰지 마세요 (credentials·오류 처리·기본 URL이 거기 있습니다)
+- 로그인 상태는 `useAuth()` 훅으로 읽습니다 (`user`, `loading`, `login/register/logout`). 세션 쿠키는 httpOnly라 JS로 접근 불가 — 직접 다루려 하지 마세요
+- 새 API가 필요하면 프론트에서 우회 구현하지 말고, 백엔드(asahi 저장소 `server/`) 작업임을 안내하세요
+- 로컬 개발에서 로그인 기능까지 확인하려면 백엔드를 로컬(8788)로 띄우고 `.env.local`에 `VITE_API_URL=http://localhost:8788` — 기본값(실서비스 API)은 localhost origin을 CORS로 막습니다
+
 ## 코드 구조와 컨벤션
 
 ```
 src/
 ├─ pages/        # 라우트 단위 페이지 (PascalCase.tsx + 동명 .css)
 ├─ layouts/      # 공통 레이아웃 (nav+footer — 페이지에서 직접 만들지 않음)
-├─ components/   # 재사용 컴포넌트 (PascalCase.tsx)
+├─ components/   # 재사용 컴포넌트 (PascalCase.tsx, AuthProvider 포함)
+├─ hooks/        # 커스텀 훅 (useAuth 등)
 ├─ lib/          # 순수 함수·유틸 (camelCase.ts)
 ├─ data/         # 콘텐츠 데이터 (부원·공지 등 — 컴포넌트에 하드코딩하지 말 것)
 ├─ assets/       # 이미지 등
