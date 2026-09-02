@@ -1,2 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
-:root{font-family:'DM Sans','Noto Sans KR',sans-serif;background:#111;color:#f5f2ec;font-synthesis:none}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px}button,a{font:inherit}button{cursor:pointer;border:0}a{color:inherit;text-decoration:none}
+
+/* 디자인 토큰 -----------------------------------------------
+   색상·폰트는 반드시 아래 변수로 사용합니다. (AGENTS.md 참조)
+   새 색상이 필요하면 임의 hex 대신 여기에 토큰을 추가하세요. */
+:root {
+  --color-bg: #f6f1e9;       /* 기본 배경 (크림) */
+  --color-bg-alt: #e4e0d9;   /* 보조 섹션 배경 */
+  --color-ink: #1d201d;      /* 기본 글자 · 다크 배경 */
+  --color-ink-soft: #697068; /* 보조 글자 */
+  --color-light: #f7f4ee;    /* 다크 배경 위 글자 */
+  --color-lime: #b7f320;     /* 포인트 (라임) */
+  --color-green: #188b4c;    /* 포인트 (그린) */
+
+  --font-sans: 'DM Sans', 'Noto Sans KR', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+
+  font-family: var(--font-sans);
+  background: #111;
+  color: #f5f2ec;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; }
+button, a { font: inherit; }
+button { cursor: pointer; border: 0; }
+a { color: inherit; text-decoration: none; }
