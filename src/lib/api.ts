@@ -44,10 +44,11 @@ export const authApi = {
   logout() {
     return request<{ ok: boolean }>('/auth/logout', { method: 'POST' })
   },
-  /** 로그인 상태 조회. 로그인 안 됨(401)은 오류가 아니라 null로 취급한다. */
+  /** 로그인 상태 조회. 비로그인이면 서버가 200 + user:null 을 반환한다.
+   *  (구버전 백엔드의 401, 서버 미가동(0)도 비로그인으로 처리 — 배포 순서 무관하게 안전) */
   async me(): Promise<ApiUser | null> {
     try {
-      const res = await request<{ user: ApiUser }>('/auth/me')
+      const res = await request<{ user: ApiUser | null }>('/auth/me')
       return res.user
     } catch (e) {
       if (e instanceof ApiError && (e.status === 401 || e.status === 0)) return null
