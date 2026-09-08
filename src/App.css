@@ -1,13 +1,16 @@
-/* docs/DESIGN.md 디자인 시스템 구현 — 모노크롬 캔버스 + 오버사이즈 파스텔 컬러블록.
+/* 2026 리디자인 프로토타입 — 흰 캔버스 + 코드 에디터 라이트 테마 구문색.
+   배경은 기존과 같은 흰색을 유지하고, 파스텔 컬러블록만 걷어냅니다
+   (docs/DESIGN.md 갱신 예정).
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
    공통 nav/footer는 layouts/Layout.css 참조.
 
    이 파일은 랜딩(/) 전용이 아니라 이 시스템을 쓰는 페이지의 공용
    스타일시트입니다. 페이지 루트에 `.ds-page` 를 달면 캔버스·타이포·
-   컬러블록·필 버튼·.reveal 연출을 그대로 받습니다(현재 / 와 /about).
+   컬러블록·버튼·.reveal 연출을 그대로 받습니다(현재 / 와 /about).
    페이지 고유 스타일은 각 페이지의 .css 에 둡니다. */
 
 .ds-page {
+  position: relative;
   background: var(--ds-canvas);
   color: var(--ds-ink);
   max-width: calc(1280px + var(--ds-space-xxl) * 2);
@@ -16,109 +19,112 @@
 }
 
 /* --- 타이포그래피 역할 ---------------------------------- */
-/* 한글은 라틴보다 글자폭이 넓어 DESIGN.md 의 86px/64px 을 그대로 쓰면 줄이 넘칩니다.
-   비율은 유지하고 상한만 낮췄으며, keep-all 로 어절 중간 줄바꿈을 막습니다. */
+/* 한글은 라틴보다 글자폭이 넓어 큰 상한을 그대로 쓰면 줄이 넘칩니다.
+   keep-all 로 어절 중간 줄바꿈을 막습니다. */
 .ds-page h1, .ds-page h2, .ds-page h3, .ds-page p, .ds-page strong, .ds-page b {
   word-break: keep-all;
 }
 
 .ds-page h1 {
-  font-size: clamp(42px, 5vw, 72px);
-  font-weight: 340;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
   margin: 0;
 }
 
 .ds-page h2 {
-  font-size: clamp(32px, 4vw, 56px);
-  font-weight: 340;
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  font-size: clamp(30px, 3.8vw, 52px);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
   margin: 0;
 }
 
 .ds-page h3 {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   line-height: 1.45;
   margin: 0;
 }
 
+/* 섹션 라벨은 코드 주석처럼 읽힙니다. */
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 1.3;
-  letter-spacing: 0.54px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: var(--ds-syntax-comment);
   margin: 0;
 }
 
+.eyebrow::before { content: '// '; }
+
 .subhead {
-  font-size: clamp(18px, 1.6vw, 26px);
-  font-weight: 340;
-  line-height: 1.35;
+  font-size: clamp(17px, 1.4vw, 22px);
+  font-weight: 300;
+  line-height: 1.5;
   letter-spacing: -0.01em;
+  color: var(--ds-ink-soft);
   margin: 0;
 }
 
 .lead {
-  font-size: 20px;
-  font-weight: 330;
-  line-height: 1.4;
-  letter-spacing: -0.14px;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ds-ink-soft);
   margin: 0;
 }
 
-/* --- 필 버튼 ------------------------------------------- */
+/* --- 버튼 --------------------------------------------- */
 .pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  border-radius: var(--ds-radius-pill);
-  font-size: 20px;
-  font-weight: 480;
+  min-height: 46px;
+  border-radius: var(--ds-radius-sm);
+  font-size: 17px;
+  font-weight: 600;
   line-height: 1.4;
-  letter-spacing: -0.1px;
+  letter-spacing: -0.01em;
   white-space: nowrap;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: filter 0.15s ease, transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.pill:hover { opacity: 0.82; }
-.pill:active { transform: scale(0.98); }
-.pill:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 3px; }
+.pill:hover { filter: brightness(1.12); }
+.pill:active { transform: translateY(1px); }
+.pill:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 3px; }
 
+/* 포스터 그린은 CTA에만 씁니다. 페이지에서 가장 밝은 면입니다. */
 .pill-primary {
-  background: var(--ds-ink);
+  background: var(--ds-poster-gradient);
   color: var(--ds-on-primary);
-  padding: 10px 20px;
+  padding: 11px 22px;
 }
 
 .pill-tertiary {
   background: transparent;
-  color: var(--ds-ink);
-  padding: var(--ds-space-xs) var(--ds-space-sm);
-  border-radius: var(--ds-radius-full);
+  color: var(--ds-syntax-link);
+  border: 1px solid var(--ds-hairline);
+  padding: 11px 18px;
 }
 
-.pill-magenta {
-  background: var(--ds-accent-magenta);
-  color: var(--ds-on-primary);
+.pill-tertiary:hover { border-color: var(--ds-syntax-link); }
+
+/* 마감·모집처럼 강한 알림에만. 페이지당 1회. */
+.pill-alert {
+  background: var(--ds-syntax-error);
+  color: var(--ds-inverse-ink);
   padding: 10px 18px;
-  font-size: 16px;
-}
-
-.block-navy .pill-primary,
-.block-navy .pill-primary:focus-visible {
-  background: var(--ds-inverse-ink);
-  color: var(--ds-ink);
-  outline-color: var(--ds-inverse-ink);
+  min-height: 40px;
+  font-size: 15px;
 }
 
 /* --- 섹션 리듬 ----------------------------------------- */
-/* 인접 섹션의 위·아래 패딩이 합쳐져 DESIGN.md 의 리듬 상수 96px 이 됩니다. */
+/* 인접 섹션의 위·아래 패딩이 합쳐져 리듬 상수 96px 이 됩니다. */
 .section { padding-block: calc(var(--ds-space-section) / 2); }
 .section > .eyebrow { margin-bottom: var(--ds-space-lg); }
 
@@ -134,10 +140,44 @@
   margin-bottom: var(--ds-space-xxl);
 }
 
+/* --- 포스터 사이드 레일 --------------------------------- */
+/* 모집 포스터 양옆의 세로 마커. 넓은 화면에서만 보이는 장식이라
+   내용은 담지 않고 aria-hidden 입니다. */
+.rail {
+  display: none;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  pointer-events: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-lg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--ds-ink-soft);
+}
+
+.rail b { writing-mode: vertical-rl; font-weight: 400; }
+
+.rail i {
+  width: 7px;
+  height: 140px;
+  background: repeating-linear-gradient(180deg, var(--ds-ink-soft) 0 3px, transparent 3px 9px);
+  opacity: 0.7;
+}
+
+@media (min-width: 1520px) {
+  .rail { display: flex; }
+  .rail-left { left: 28px; }
+  .rail-right { right: 28px; }
+}
+
 /* --- 히어로 ------------------------------------------- */
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
   gap: var(--ds-space-xxl);
   align-items: center;
   padding-block: var(--ds-space-xxl) var(--ds-space-section);
@@ -146,6 +186,33 @@
 .hero-copy .eyebrow { margin-bottom: var(--ds-space-lg); }
 .hero-copy .lead { margin-block: var(--ds-space-lg) var(--ds-space-xl); }
 
+/* 헤드라인 = 에디터 본문. 왼쪽 거터에 줄 번호가 붙습니다. */
+.hero-title { padding-left: 52px; }
+.hero-line { display: block; position: relative; }
+
+.hero-line .ln {
+  position: absolute;
+  left: -52px;
+  top: 0.42em;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-style: normal;
+  letter-spacing: 0.05em;
+  color: var(--ds-gutter);
+}
+
+.tok-string { font-style: normal; color: var(--ds-syntax-string); }
+
+/* 마지막 세미콜론만 포스터 그라디언트로 칠합니다.
+   흰 배경 위 글자라 라임 대신 진한 그린 그라디언트를 씁니다. */
+.tok-semi {
+  font-style: normal;
+  background: var(--ds-poster-gradient-ink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .cta-row {
   display: flex;
   align-items: center;
@@ -153,70 +220,77 @@
   flex-wrap: wrap;
 }
 
-/* 코드 목업: 네이비 패널 위 파스텔 구문 강조 (그림자 없음) */
-.hero-mock {
-  position: relative;
-  background: var(--ds-block-navy);
-  color: var(--ds-inverse-ink);
-  border-radius: var(--ds-radius-lg);
+/* 히어로 하단 사실 한 줄 — 포스터 하단 정보 라인의 역할입니다. */
+.hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-xl);
+  margin: var(--ds-space-xxl) 0 0;
+  padding-top: var(--ds-space-lg);
+  border-top: 1px solid var(--ds-hairline-soft);
   font-family: var(--font-mono);
-  overflow: visible;
 }
 
-.mock-bar {
+.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-syntax-comment); }
+.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-syntax-prop); }
+
+/* 포스터 패널: 페이지에서 유일한 대형 컬러 면입니다. */
+.hero-poster {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--ds-space-xs);
-  height: 44px;
-  padding-inline: var(--ds-space-lg);
-  font-size: 12px;
-  letter-spacing: 0.6px;
-  color: color-mix(in srgb, var(--ds-inverse-ink) 60%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-inverse-ink) 12%, transparent);
+  justify-content: center;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-poster-gradient);
+  overflow: hidden;
 }
 
-.mock-bar span {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--ds-radius-full);
-  background: color-mix(in srgb, var(--ds-inverse-ink) 28%, transparent);
-}
-
-.mock-bar b { font-weight: 400; margin-left: var(--ds-space-xs); }
-
-.mock-code { padding: var(--ds-space-lg) var(--ds-space-lg) var(--ds-space-xl); font-size: 13px; line-height: 1.9; }
-.mock-code p { margin: 0; }
-.mock-code i { font-style: normal; margin-right: var(--ds-space-md); color: color-mix(in srgb, var(--ds-inverse-ink) 35%, transparent); }
-.mock-code b { font-weight: 400; color: var(--ds-block-lilac); }
-.mock-code strong { font-weight: 400; color: var(--ds-block-mint); }
-.mock-code span { color: var(--ds-block-lime); }
-.mock-code mark { background: none; color: var(--ds-block-cream); }
-
-/* 스티키 노트: 약간의 회전은 브랜드 시그널 (DESIGN.md) */
-.sticky-note {
+/* 포스터의 바코드 마커. */
+.hero-poster::before,
+.hero-poster::after {
+  content: '';
   position: absolute;
-  padding: var(--ds-space-sm) var(--ds-space-md);
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-block-cream);
-  color: var(--ds-ink);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.4;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
+  top: var(--ds-space-lg);
+  bottom: var(--ds-space-lg);
+  width: 8px;
+  background: repeating-linear-gradient(180deg, var(--ds-on-primary) 0 4px, transparent 4px 11px);
+  opacity: 0.55;
 }
 
-.sticky-note b { font-size: 14px; }
-.note-one { left: calc(-1 * var(--ds-space-xl)); bottom: calc(-1 * var(--ds-space-xxl)); transform: rotate(-6deg); }
-.note-two { right: calc(-1 * var(--ds-space-lg)); top: calc(-1 * var(--ds-space-lg)); transform: rotate(5deg); background: var(--ds-block-lime); }
+.hero-poster::before { left: var(--ds-space-md); }
+.hero-poster::after { right: var(--ds-space-md); }
+
+.poster-glyph {
+  font-family: var(--font-display);
+  font-size: clamp(180px, 20vw, 280px);
+  line-height: 0.8;
+  color: var(--ds-on-primary);
+  transform: translateY(-0.06em);
+}
+
+.poster-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--ds-space-lg);
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--ds-on-primary);
+}
+
+.poster-caption b { display: block; margin-top: var(--ds-space-xxs); font-weight: 700; }
 
 /* --- 마퀴 스트립 --------------------------------------- */
 .marquee {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  height: 36px;
-  background: var(--ds-inverse-canvas);
-  color: var(--ds-inverse-ink);
+  height: 34px;
+  background: var(--ds-poster-gradient);
+  color: var(--ds-on-primary);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -228,7 +302,8 @@
   font-family: var(--font-mono);
   font-style: normal;
   font-size: 12px;
-  letter-spacing: 0.6px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   padding-inline: var(--ds-space-lg);
 }
 .marquee-group i::after { content: ' ;'; }
@@ -239,8 +314,12 @@
 }
 
 /* --- 컬러블록 ----------------------------------------- */
+/* 파스텔 면 대신, 중립 면 + 왼쪽 구문색 액센트 바입니다.
+   블록끼리의 구분은 채워진 색이 아니라 액센트 색이 만듭니다. */
 .block {
-  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-hairline);
+  border-left: 3px solid var(--ds-syntax-type);
+  border-radius: var(--ds-radius-md);
   padding: var(--ds-space-xxl);
   background: var(--ds-block-lime);
   color: var(--ds-ink);
@@ -249,11 +328,21 @@
 .block .eyebrow { margin-bottom: var(--ds-space-lg); }
 .block h2 + .subhead { margin-top: var(--ds-space-lg); max-width: 62ch; }
 
-.block-lilac { background: var(--ds-block-lilac); }
-.block-coral { background: var(--ds-block-coral); }
-.block-lime { background: var(--ds-block-lime); }
-.block-mint { background: var(--ds-block-mint); }
-.block-navy { background: var(--ds-block-navy); color: var(--ds-inverse-ink); }
+.block-lilac { background: var(--ds-block-lilac); border-left-color: var(--ds-syntax-control); }
+.block-coral { background: var(--ds-block-coral); border-left-color: var(--ds-syntax-error); }
+.block-lime { background: var(--ds-block-lime); border-left-color: var(--ds-syntax-comment); }
+.block-mint { background: var(--ds-block-mint); border-left-color: var(--ds-syntax-type); }
+/* 페이지에서 유일한 반전 면입니다. 같은 화면이 다크 테마로 넘어간 것처럼
+   보이도록, 이 안에서만 구문색을 다크 팔레트로 바꿔 씁니다. */
+.block-navy {
+  background: var(--ds-block-navy);
+  color: var(--ds-inverse-ink);
+  border-color: var(--ds-block-navy);
+  border-left-color: var(--ds-syntax-keyword-dark);
+}
+
+.block-navy .eyebrow { color: var(--ds-syntax-comment-dark); }
+.block-navy .subhead { color: #b4b8bd; }
 
 .quote-block { padding-block: calc(var(--ds-space-section) - var(--ds-space-lg)); }
 /* ch 은 '0' 글자 폭 기준이라 한글에서는 예상보다 좁습니다.
@@ -262,7 +351,8 @@
 .quote-line { display: block; }
 /* inline-block 은 안쪽 끝 공백이 잘리므로 어절 간격을 margin 으로 줍니다. */
 .quote-word { display: inline-block; margin-inline-end: 0.26em; }
-.quote-word.strong { font-weight: 540; }
+.quote-word.strong { font-weight: 700; color: var(--ds-syntax-type); }
+.block-navy .quote-word.strong { color: var(--ds-syntax-type-dark); }
 
 /* --- 01 ABOUT ----------------------------------------- */
 .value-grid {
@@ -295,11 +385,11 @@
 }
 
 .value .eyebrow { display: block; margin-bottom: var(--ds-space-xl); }
-.value strong { display: block; font-size: 24px; font-weight: 700; line-height: 1.45; }
-.value span { display: block; margin-top: var(--ds-space-xs); font-size: 16px; font-weight: 330; line-height: 1.45; }
+.value strong { display: block; font-size: 22px; font-weight: 600; line-height: 1.45; }
+.value span { display: block; margin-top: var(--ds-space-xs); font-size: 16px; font-weight: 300; line-height: 1.5; color: var(--ds-ink-soft); }
 
 /* --- 02 PROGRAM --------------------------------------- */
-/* 라일락 블록과 카드 사이 여백을 담는 받침. */
+/* 컬러블록과 카드 사이 여백을 담는 받침. */
 .card-sheet { padding-block: var(--ds-space-section) 0; }
 
 .card-grid {
@@ -310,16 +400,17 @@
 
 .card {
   border: 1px solid var(--ds-hairline);
-  border-radius: var(--ds-radius-lg);
+  border-radius: var(--ds-radius-md);
   padding: var(--ds-space-lg);
-  background: var(--ds-canvas);
+  background: var(--ds-surface);
 }
 
 .card .eyebrow { display: block; margin-bottom: var(--ds-space-xxl); }
 .card h3 { margin-bottom: var(--ds-space-sm); }
-.card p { font-size: 16px; font-weight: 330; line-height: 1.45; letter-spacing: -0.14px; margin: 0; }
+.card p { font-size: 16px; font-weight: 300; line-height: 1.5; margin: 0; color: var(--ds-ink-soft); }
 
 /* --- 03 PROCESS --------------------------------------- */
+/* 실제 순서가 있는 절차라 번호를 그대로 둡니다. */
 .steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -329,9 +420,10 @@
   padding: 0;
 }
 
-.steps .eyebrow { display: block; }
-.steps b { display: block; margin-block: var(--ds-space-xl) var(--ds-space-sm); font-size: 24px; font-weight: 700; line-height: 1.45; }
-.steps p { margin: 0; font-size: 16px; font-weight: 330; line-height: 1.45; }
+.steps .eyebrow { display: block; color: var(--ds-syntax-number); }
+.steps .eyebrow::before { content: none; }
+.steps b { display: block; margin-block: var(--ds-space-xl) var(--ds-space-sm); font-size: 22px; font-weight: 600; line-height: 1.45; }
+.steps p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; color: var(--ds-ink-soft); }
 
 /* --- 04 APPLY ----------------------------------------- */
 .promo-banner {
@@ -340,29 +432,31 @@
   justify-content: space-between;
   gap: var(--ds-space-lg);
   flex-wrap: wrap;
-  background: var(--ds-block-lilac);
+  background: var(--ds-surface);
   color: var(--ds-ink);
-  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-hairline);
+  border-radius: var(--ds-radius-sm);
   padding: var(--ds-space-md) var(--ds-space-lg);
   margin-bottom: var(--ds-space-xl);
 }
 
-.promo-banner p { margin: 0; font-size: 16px; font-weight: 330; line-height: 1.45; }
+.promo-banner p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; }
 
 .apply-block .pill-primary { margin-top: var(--ds-space-xl); }
 .apply-block small {
   display: block;
   margin-top: var(--ds-space-sm);
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.6px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--ds-ink-soft);
 }
 
 /* --- 05 FAQ ------------------------------------------- */
 .faq-block h2 { margin-bottom: var(--ds-space-xl); }
-.faq-item { border-top: 1px solid color-mix(in srgb, var(--ds-ink) 14%, transparent); }
-.faq-item:last-child { border-bottom: 1px solid color-mix(in srgb, var(--ds-ink) 14%, transparent); }
+.faq-item { border-top: 1px solid var(--ds-hairline); }
+.faq-item:last-child { border-bottom: 1px solid var(--ds-hairline); }
 
 .faq-item button {
   width: 100%;
@@ -374,27 +468,28 @@
   color: inherit;
   padding-block: var(--ds-space-lg);
   min-height: 44px;
-  font-size: 20px;
-  font-weight: 480;
+  font-size: 18px;
+  font-weight: 500;
   line-height: 1.4;
-  letter-spacing: -0.1px;
 }
 
-.faq-item button b { margin-left: auto; font-size: 24px; font-weight: 400; }
+.faq-item button:hover { color: var(--ds-syntax-prop); }
+.faq-item button:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 2px; }
+.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-syntax-type); }
 .faq-item p {
   margin: 0;
   padding-bottom: var(--ds-space-lg);
   max-width: 68ch;
-  font-size: 18px;
-  font-weight: 320;
-  line-height: 1.45;
-  letter-spacing: -0.26px;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ds-ink-soft);
 }
 
-/* --- 반응형 (DESIGN.md 브레이크포인트) ------------------ */
+/* --- 반응형 -------------------------------------------- */
 @media (max-width: 960px) {
-  .hero { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-section); }
-  .hero-mock { max-width: 440px; }
+  .hero { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-xxl); }
+  .hero-poster { max-width: 360px; aspect-ratio: 4 / 3; }
   .section-head { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-lg); }
 }
 
@@ -403,15 +498,30 @@
   .section { padding-block: calc(var(--ds-space-section) / 2 * 0.75); }
   /* 항목이 3개라 2열은 한 칸이 남습니다. 3열 → 1열로 바로 접습니다. */
   .value-grid, .card-grid, .steps { grid-template-columns: minmax(0, 1fr); }
-  /* 컬러블록은 뷰포트 끝까지 풀블리드, 라운드 제거 */
+  /* 컬러블록은 뷰포트 끝까지 풀블리드, 라운드 제거.
+     왼쪽 액센트 바는 그대로 둡니다. border-inline / border-left 를 다시
+     쓰면 .block-* 이 지정한 액센트 색까지 currentColor 로 덮어써
+     모든 블록이 같은 색이 됩니다. 오른쪽 헤어라인만 지웁니다. */
   .block {
     width: 100vw;
     margin-left: calc(50% - 50vw);
     border-radius: 0;
+    border-right: 0;
     padding: var(--ds-space-xl) var(--ds-space-lg);
   }
   .card-sheet { padding-block: var(--ds-space-xl) 0; }
   .quote-block { padding-block: var(--ds-space-xxl); }
+  /* 좁은 화면에서는 줄 번호 거터를 접습니다. */
+  .hero-title { padding-left: 0; }
+  .hero-line .ln { display: none; }
+}
+
+@media (max-width: 560px) {
+  .cta-row { flex-direction: column; align-items: stretch; }
+  .cta-row .pill { width: 100%; }
+  .hero-facts { gap: var(--ds-space-lg); }
+  .promo-banner { flex-direction: column; align-items: flex-start; }
+  .faq-item button { font-size: 17px; }
 }
 
 /* ======================================================
@@ -441,7 +551,7 @@
   to { opacity: 0; transform: translateY(-48px); }
 }
 
-@keyframes hero-mock-drift {
+@keyframes hero-poster-drift {
   to { transform: translateY(-72px); }
 }
 
@@ -490,7 +600,7 @@
 }
 
 /* 히어로 패럴랙스는 좁은 화면에서 요소가 서로 겹치므로 데스크톱에서만. */
-@media screen and (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+@media screen and (min-width: 961px) and (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: scroll()) {
     .hero-copy {
       animation: hero-copy-exit linear both;
@@ -498,19 +608,18 @@
       animation-range: 0 80vh;
     }
 
-    /* 목업이 본문보다 느리게 따라와 깊이가 생깁니다. */
-    .hero-mock {
-      animation: hero-mock-drift linear both;
+    /* 포스터가 본문보다 느리게 따라와 깊이가 생깁니다. */
+    .hero-poster {
+      animation: hero-poster-drift linear both;
       animation-timeline: scroll(root block);
       animation-range: 0 110vh;
     }
   }
 }
 
-/* 인용 블록 핀 고정: 네이비 패널이 화면에 물린 채로, 문장이 어절 단위로
+/* 인용 블록 핀 고정: 패널이 화면에 물린 채로, 문장이 어절 단위로
    차례차례 밝아집니다. 패널을 다른 요소로 덮지 않으므로 글자가 잘리거나
-   컬러블록이 빈 띠로 남는 일이 없고, DESIGN.md 의 "한 뷰포트에 컬러블록
-   하나" 규칙도 지켜집니다.
+   컬러블록이 빈 띠로 남는 일이 없습니다.
    sticky 자체는 Firefox 에서도 동작하며, 어절 밝아짐만 점진적 향상입니다.
    모바일에서는 핀 체감이 나빠 데스크톱 전용입니다. */
 @media screen and (min-width: 961px) and (prefers-reduced-motion: no-preference) {
@@ -524,8 +633,7 @@
     position: sticky;
     /* sticky nav(56px) 아래로 여백 한 칸 */
     top: calc(56px + var(--ds-space-lg));
-    /* 핀 상태에서 패널이 화면 대부분을 차지하게 합니다.
-       기본 높이(약 370px)로는 아래쪽에 흰 여백만 크게 남습니다. */
+    /* 핀 상태에서 패널이 화면 대부분을 차지하게 합니다. */
     min-height: 68vh;
     display: flex;
     flex-direction: column;
@@ -553,15 +661,4 @@
     .quote-line:nth-child(2) .quote-word:nth-child(5) { animation-range: cover 66% cover 74%; }
     .quote-line:nth-child(2) .quote-word:nth-child(6) { animation-range: cover 69% cover 77%; }
   }
-}
-
-@media (max-width: 560px) {
-  .cta-row { flex-direction: column; align-items: stretch; }
-  .cta-row .pill { width: 100%; }
-  /* 좁은 화면에서는 노트가 목업 타이틀바를 덮지 않도록 위로 밀어냅니다. */
-  .hero-mock { margin-top: var(--ds-space-xl); }
-  .note-one { left: calc(-1 * var(--ds-space-sm)); }
-  .note-two { right: 0; top: calc(-1 * var(--ds-space-xxl)); }
-  .promo-banner { flex-direction: column; align-items: flex-start; }
-  .faq-item button { font-size: 18px; }
 }
