@@ -1,29 +1,137 @@
-.site-shell { overflow: hidden; background: var(--color-bg); color: var(--color-ink); }
+/* 공통 nav/footer — docs/DESIGN.md 의 top-nav · footer 컴포넌트 구현.
+   흰 캔버스 위 모노크롬 크롬, CTA는 필(pill) 형태만 사용합니다. */
 
-.nav { height: 76px; display: flex; align-items: center; justify-content: space-between; max-width: 1240px; padding: 0 32px; margin: auto; position: relative; z-index: 5; }
-.logo { font-family: var(--font-mono); font-weight: 500; letter-spacing: -0.5px; font-size: 16px; }
-.logo span { display: inline-grid; place-items: center; width: 25px; height: 25px; background: var(--color-lime); color: var(--color-ink); font-weight: 700; font-size: 24px; line-height: 1; margin-right: 5px; }
-.nav-links { display: flex; gap: 30px; align-items: center; font-size: 13px; }
-.nav-links a { opacity: 0.75; }
-.nav-links a:hover { opacity: 1; }
-.nav-links a.nav-cta { opacity: 1; }
-.nav-cta { display: inline-block; padding: 11px 16px; background: var(--color-ink); color: #fff; border-radius: 4px; font-size: 13px; }
-.nav-cta span { font-size: 18px; margin-left: 7px; }
-.mobile-menu { display: none; background: none; font-size: 23px; }
-.nav-user { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; }
-.nav-user b { font-weight: 600; }
-.nav-logout { background: none; font: 500 11px var(--font-mono); color: var(--color-ink-soft); border-bottom: 1px solid currentColor; padding: 1px 0; }
-.nav-logout:hover { color: var(--color-ink); }
+.site-shell { overflow-x: hidden; background: var(--ds-canvas); color: var(--ds-ink); }
 
-footer { padding: 43px max(32px, calc((100vw - 1176px) / 2)); background: var(--color-ink); color: var(--color-light); display: flex; align-items: center; gap: 25px; font-size: 12px; }
-footer p:last-child { margin-left: auto; color: #899088; font: 10px var(--font-mono); }
+/* --- top-nav ------------------------------------------ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-lg);
+  max-width: calc(1280px + var(--ds-space-xxl) * 2);
+  margin-inline: auto;
+  padding-inline: var(--ds-space-xxl);
+  background: var(--ds-canvas);
+}
 
-@media (max-width: 700px) {
-  .nav { height: 64px; padding: 0 20px; }
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-xxs);
+  font-size: 18px;
+  font-weight: 540;
+  letter-spacing: -0.02em;
+}
+
+.logo span { font-size: 22px; font-weight: 700; line-height: 1; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-lg);
+  font-size: 16px;
+  font-weight: 330;
+  line-height: 1.45;
+  letter-spacing: -0.14px;
+}
+
+.nav-links > a { padding-block: var(--ds-space-xs); }
+.nav-links > a:hover { opacity: 0.6; }
+
+.nav-cta,
+.nav-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: var(--ds-radius-pill);
+  font-size: 16px;
+  font-weight: 480;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.nav-cta { background: var(--ds-ink); color: var(--ds-on-primary); }
+.nav-login { background: var(--ds-canvas); color: var(--ds-ink); }
+.nav-cta:hover, .nav-login:hover { opacity: 0.82; }
+.nav-cta:focus-visible, .nav-login:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 3px; }
+
+.mobile-menu {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-soft);
+  color: var(--ds-ink);
+  font-size: 18px;
+}
+
+.nav-user { display: inline-flex; align-items: center; gap: var(--ds-space-sm); font-size: 16px; font-weight: 330; }
+.nav-user b { font-weight: 540; }
+.nav-logout {
+  background: transparent;
+  color: var(--ds-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: var(--ds-space-xxs) 0;
+  border-bottom: 1px solid currentColor;
+}
+.nav-logout:hover { opacity: 0.6; }
+
+/* --- footer ------------------------------------------- */
+footer {
+  max-width: calc(1280px + var(--ds-space-xxl) * 2);
+  margin-inline: auto;
+  padding: var(--ds-space-section) var(--ds-space-xxl);
+  border-top: 1px solid var(--ds-hairline);
+  background: var(--ds-canvas);
+  color: var(--ds-ink);
+}
+
+footer .logo { font-size: clamp(38px, 5vw, 64px); font-weight: 340; letter-spacing: -0.015em; gap: var(--ds-space-xs); }
+footer .logo span { font-size: 1em; }
+
+footer p {
+  margin: var(--ds-space-md) 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* --- 반응형 ------------------------------------------- */
+@media (max-width: 960px) {
   .mobile-menu { display: block; }
   .nav-links { display: none; }
-  .nav-links.open { display: flex; position: absolute; top: 60px; left: 12px; right: 12px; padding: 20px; background: var(--color-ink); color: #fff; flex-direction: column; align-items: stretch; gap: 18px; }
-  footer { padding: 35px 22px; display: block; }
-  footer p { margin: 18px 0 0; }
-  footer p:last-child { margin-left: 0; }
+  .nav-links.open {
+    display: flex;
+    position: absolute;
+    top: 56px;
+    left: var(--ds-space-lg);
+    right: var(--ds-space-lg);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-space-md);
+    padding: var(--ds-space-lg);
+    background: var(--ds-canvas);
+    border: 1px solid var(--ds-hairline);
+    border-radius: var(--ds-radius-lg);
+  }
+  .nav-links.open .nav-cta,
+  .nav-links.open .nav-login { min-height: 44px; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding-inline: var(--ds-space-lg); }
+  footer { padding: var(--ds-space-xxl) var(--ds-space-lg); }
 }

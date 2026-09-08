@@ -30,9 +30,9 @@ function Layout({ children }: { children: ReactNode }) {
               <button className="nav-logout" onClick={() => { void logout(); closeMenu() }}>로그아웃</button>
             </span>
           ) : (
-            <Link to="/login" onClick={closeMenu}>로그인</Link>
+            <Link className="nav-login" to="/login" onClick={closeMenu}>로그인</Link>
           ))}
-          <Link className="nav-cta" to="/recruit" onClick={closeMenu}>지원하기 <span>↗</span></Link>
+          <Link className="nav-cta" to="/recruit" onClick={closeMenu}>지원하기</Link>
         </div>
       </nav>
 
