@@ -1,0 +1,140 @@
+/* 동아리 소개(/about) 페이지 스타일.
+   공통 디자인 시스템 프리미티브(.ds-page 타이포, .eyebrow, .block, .card,
+   .value-grid, .pill, .reveal)는 App.css 에 있고 이 파일은 이 페이지에만
+   있는 것 — 페이지 헤더, 활동 리듬, 연중 일정 — 만 담습니다.
+   색상·여백은 index.css 의 --ds-* 토큰만 사용합니다. */
+
+/* --- 페이지 헤더 --------------------------------------- */
+/* 랜딩 히어로와 달리 목업 없이 글만 놓입니다. 좌측 정렬 유지. */
+.about-head {
+  padding-block: var(--ds-space-xxl) var(--ds-space-section);
+  max-width: 62ch;
+}
+
+.about-head .eyebrow { margin-bottom: var(--ds-space-lg); }
+.about-head .lead { margin-top: var(--ds-space-xl); }
+
+/* --- 03 활동 리듬 -------------------------------------- */
+/* .value/.steps 와 같은 헤어라인 패턴이지만 구간 값이 달라
+   App.css 의 랜딩 규칙에 섞지 않고 여기서 따로 잡습니다. */
+.rhythm-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ds-space-xl);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rhythm-list li {
+  position: relative;
+  padding-top: var(--ds-space-lg);
+  view-timeline-name: --rhythm-track;
+}
+
+.rhythm-list li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ds-hairline);
+  transform-origin: left center;
+}
+
+.rhythm-list .eyebrow { display: block; }
+.rhythm-list b {
+  display: block;
+  margin-block: var(--ds-space-xl) var(--ds-space-sm);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.rhythm-list p { margin: 0; font-size: 16px; font-weight: 330; line-height: 1.45; }
+
+/* --- 연중 일정 ----------------------------------------- */
+/* 컬러블록이 아니라 오프화이트 타일입니다. 바로 아래 민트 블록과
+   한 화면에서 겹치지 않도록 채도를 두지 않았습니다. */
+.milestones {
+  margin-top: var(--ds-space-section);
+  background: var(--ds-surface-soft);
+  border-radius: var(--ds-radius-lg);
+  padding: var(--ds-space-xl);
+}
+
+.milestones > .eyebrow { margin-bottom: var(--ds-space-lg); }
+
+.milestones ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 var(--ds-space-xl);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.milestones li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-space-md);
+  padding-block: var(--ds-space-md);
+  border-top: 1px solid var(--ds-hairline);
+}
+
+/* 3열 그리드의 첫 행은 위 테두리를 지웁니다. */
+.milestones li:nth-child(-n + 3) { border-top: 0; }
+
+.milestones i {
+  flex: none;
+  min-width: 6em;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  color: color-mix(in srgb, var(--ds-ink) 55%, transparent);
+}
+
+.milestones span { font-size: 16px; font-weight: 330; line-height: 1.45; }
+
+/* --- 마무리 CTA ---------------------------------------- */
+.about-cta .pill-primary { margin-top: var(--ds-space-xl); }
+
+/* --- 반응형 -------------------------------------------- */
+@media (max-width: 960px) {
+  .about-head { padding-block: var(--ds-space-xl) var(--ds-space-xxl); }
+  .milestones ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .milestones li:nth-child(-n + 3) { border-top: 1px solid var(--ds-hairline); }
+  .milestones li:nth-child(-n + 2) { border-top: 0; }
+}
+
+@media (max-width: 768px) {
+  /* 항목이 3개라 2열은 한 칸이 남습니다. 3열 → 1열로 바로 접습니다. */
+  .rhythm-list { grid-template-columns: minmax(0, 1fr); }
+  .milestones {
+    margin-top: var(--ds-space-xxl);
+    padding: var(--ds-space-lg);
+  }
+  .milestones ul { grid-template-columns: minmax(0, 1fr); }
+  .milestones li:nth-child(-n + 2) { border-top: 1px solid var(--ds-hairline); }
+  .milestones li:first-child { border-top: 0; }
+}
+
+/* --- 스크롤 연출 ---------------------------------------
+   원칙은 App.css 와 같습니다. 기본 상태 = 애니메이션이 끝난 모습이라
+   아래 블록이 통째로 빠져도 정적 페이지로 그대로 보입니다. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .rhythm-list li::after {
+      animation: draw-line linear both;
+      animation-timeline: --rhythm-track;
+      animation-range: cover 4% cover 24%;
+    }
+
+    /* 형제가 같은 타임라인을 공유하므로 구간을 어긋나게 잡아 스태거를 만듭니다. */
+    .rhythm-list > .reveal:nth-child(2) { animation-range: cover 12% cover 34%; }
+    .rhythm-list > .reveal:nth-child(2)::after { animation-range: cover 12% cover 32%; }
+    .rhythm-list > .reveal:nth-child(3) { animation-range: cover 20% cover 42%; }
+    .rhythm-list > .reveal:nth-child(3)::after { animation-range: cover 20% cover 40%; }
+  }
+}

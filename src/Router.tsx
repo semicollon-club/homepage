@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactElement } from 'react'
 import App from './App'
+import AboutPage from './pages/AboutPage'
 import Layout from './layouts/Layout'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -17,6 +18,7 @@ interface Route {
 /** 새 페이지는 여기에 경로와 타이틀을 등록하세요. */
 const routes: Record<string, Route> = {
   '/': { Component: App, title: SITE_NAME },
+  '/about': { Component: AboutPage, title: `동아리 소개 | ${SITE_NAME}` },
   '/organization': { Component: OrganizationPage, title: `조직도 | ${SITE_NAME}` },
   '/recruit': { Component: RecruitPage, title: `지원 안내 | ${SITE_NAME}` },
   '/login': { Component: LoginPage, title: `로그인 | ${SITE_NAME}` },
