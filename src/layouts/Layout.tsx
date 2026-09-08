@@ -5,8 +5,8 @@ import { useAuth } from '../hooks/useAuth'
 import './Layout.css'
 
 const menuLinks = [
-  { to: '/#about', label: '세미콜론 소개' },
-  { to: '/#program', label: '우리가 하는 일' },
+  { to: '/about', label: '세미콜론 소개' },
+  { to: '/about#program', label: '우리가 하는 일' },
   { to: '/organization', label: '조직도' },
 ]
 
