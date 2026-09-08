@@ -1,5 +1,6 @@
 /* 공통 nav/footer — docs/DESIGN.md 의 top-nav · footer 컴포넌트 구현.
-   흰 캔버스 위 모노크롬 크롬, CTA는 필(pill) 형태만 사용합니다. */
+   2026 리디자인: 다크 에디터 표면 위의 얇은 크롬. nav 는 에디터 탭바,
+   footer 는 상태 표시줄처럼 읽히도록 헤어라인과 모노 타이포만 씁니다. */
 
 /* overflow-x 는 hidden 이 아니라 clip 이어야 합니다. hidden 은 이 요소를
    스크롤 컨테이너로 만들어(overflow-y 가 auto 로 계산됨) 자손의
@@ -32,6 +33,7 @@
   left: calc(50% - 50vw);
   width: 100vw;
   background: var(--ds-canvas);
+  border-bottom: 1px solid var(--ds-hairline);
   z-index: -1;
 }
 
@@ -44,7 +46,14 @@
   letter-spacing: -0.02em;
 }
 
-.logo span { font-size: 22px; font-weight: 700; line-height: 1; }
+/* 로고의 세미콜론만 포스터 그린으로 칠합니다. */
+.logo span {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ds-poster-lime);
+}
 
 .nav-links {
   display: flex;
@@ -57,7 +66,7 @@
 }
 
 .nav-links > a { padding-block: var(--ds-space-xs); }
-.nav-links > a:hover { opacity: 0.6; }
+.nav-links > a:hover { color: var(--ds-syntax-prop); }
 
 .nav-cta,
 .nav-login {
@@ -66,18 +75,19 @@
   justify-content: center;
   min-height: 40px;
   padding: 8px 18px;
-  border-radius: var(--ds-radius-pill);
+  border-radius: var(--ds-radius-sm);
   font-size: 16px;
-  font-weight: 480;
+  font-weight: 600;
   letter-spacing: -0.1px;
   white-space: nowrap;
-  transition: opacity 0.15s ease;
+  transition: filter 0.15s ease, border-color 0.15s ease;
 }
 
-.nav-cta { background: var(--ds-ink); color: var(--ds-on-primary); }
-.nav-login { background: var(--ds-canvas); color: var(--ds-ink); }
-.nav-cta:hover, .nav-login:hover { opacity: 0.82; }
-.nav-cta:focus-visible, .nav-login:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 3px; }
+.nav-cta { background: var(--ds-poster-gradient); color: var(--ds-on-primary); }
+.nav-login { background: transparent; color: var(--ds-ink); border: 1px solid var(--ds-hairline); font-weight: 400; }
+.nav-cta:hover { filter: brightness(1.12); }
+.nav-login:hover { border-color: var(--ds-syntax-link); }
+.nav-cta:focus-visible, .nav-login:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 3px; }
 
 .mobile-menu {
   display: none;
@@ -113,11 +123,12 @@ footer {
   color: var(--ds-ink);
 }
 
-footer .logo { font-size: clamp(38px, 5vw, 64px); font-weight: 340; letter-spacing: -0.015em; gap: var(--ds-space-xs); }
+footer .logo { font-size: clamp(38px, 5vw, 64px); font-weight: 600; letter-spacing: -0.02em; gap: var(--ds-space-xs); }
 footer .logo span { font-size: 1em; }
 
 footer p {
   margin: var(--ds-space-md) 0 0;
+  color: var(--ds-ink-soft);
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.6;
