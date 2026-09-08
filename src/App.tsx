@@ -30,6 +30,17 @@ const faqs = [
 
 const marqueeItems = ['STUDY', 'SIDE PROJECT', 'CODE REVIEW', 'HACKATHON', 'ALGORITHM', 'WEB', 'AI', 'DEMO DAY']
 
+/* 인용 문장. 어절 단위로 감싸 스크롤에 따라 차례로 밝아지게 합니다.
+   줄 구분을 배열로 두는 이유는 CSS 에서 :nth-child 로 줄마다 구간을
+   지정하기 때문입니다 (<br> 를 넣으면 인덱스가 밀립니다). */
+const quoteLines: { text: string; strong?: boolean }[][] = [
+  [{ text: '우리는' }, { text: '완벽한' }, { text: '개발자를' }, { text: '찾지' }, { text: '않습니다.' }],
+  [
+    { text: '함께', strong: true }, { text: '더', strong: true }, { text: '나아가고', strong: true },
+    { text: '싶은', strong: true }, { text: '사람을', strong: true }, { text: '기다립니다.' },
+  ],
+]
+
 function App() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const scrollToApply = () => document.querySelector('#apply')?.scrollIntoView({ behavior: 'smooth' })
@@ -77,7 +88,7 @@ function App() {
 
       <section className="section" id="about">
         <p className="eyebrow">01 — ABOUT US</p>
-        <div className="section-head">
+        <div className="section-head reveal">
           <h2>좋은 코드는,<br />좋은 동료에게서 시작됩니다.</h2>
           <p className="subhead">
             혼자서는 막막했던 한 줄의 코드도, 함께라면 새로운 가능성이 됩니다.
@@ -86,7 +97,7 @@ function App() {
         </div>
         <div className="value-grid">
           {values.map((item) => (
-            <div className="value" key={item.label}>
+            <div className="value reveal" key={item.label}>
               <b className="eyebrow">{item.label}</b>
               <strong>{item.title}</strong>
               <span>{item.text}</span>
@@ -101,27 +112,41 @@ function App() {
           <h2>코드 너머의<br />경험을 만듭니다.</h2>
           <p className="subhead">완성도 있는 결과물과 오래 남는 동료를 동시에 만드는 활동들.</p>
         </div>
-        <div className="card-grid">
-          {programs.map((item) => (
-            <article className="card" key={item.no}>
-              <span className="eyebrow">{item.no}</span>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
-          ))}
+        <div className="card-sheet">
+          <div className="card-grid">
+            {programs.map((item) => (
+              <article className="card reveal" key={item.no}>
+                <span className="eyebrow">{item.no}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="block block-navy quote-block">
-          <p className="eyebrow">SEMICOLON CLUB</p>
-          <h2>우리는 완벽한 개발자를 찾지 않습니다.<br /><b>함께 더 나아가고 싶은 사람</b>을 기다립니다.</h2>
+      <section className="section quote-section">
+        <div className="quote-track">
+          <div className="block block-navy quote-block">
+            <p className="eyebrow">SEMICOLON CLUB</p>
+            <h2>
+              {quoteLines.map((line, lineIndex) => (
+                <span className="quote-line" key={lineIndex}>
+                  {line.map((word) => (
+                    <span className={word.strong ? 'quote-word strong' : 'quote-word'} key={word.text}>
+                      {word.text}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </h2>
+          </div>
         </div>
       </section>
 
       <section className="section" id="process">
         <p className="eyebrow">03 — JOIN US</p>
-        <div className="section-head">
+        <div className="section-head reveal">
           <h2>우리의 다음 문장은<br />당신으로 이어집니다.</h2>
           <p className="subhead">
             개발 경험이 없어도, 전공이 아니어도 새로운 것을 만들고 싶은 마음이면 충분해요.
@@ -129,7 +154,7 @@ function App() {
         </div>
         <ol className="steps">
           {steps.map((item) => (
-            <li key={item.label}>
+            <li className="reveal" key={item.label}>
               <span className="eyebrow">{item.label}</span>
               <b>{item.title}</b>
               <p>{item.text}</p>
@@ -139,7 +164,7 @@ function App() {
       </section>
 
       <section className="section" id="apply">
-        <div className="promo-banner">
+        <div className="promo-banner reveal">
           <p>2026학년도 1학기 신입 부원 모집이 진행 중입니다.</p>
           <a className="pill pill-magenta" href={applicationUrl} target="_blank" rel="noreferrer">지금 신청하기</a>
         </div>

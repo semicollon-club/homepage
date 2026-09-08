@@ -247,8 +247,13 @@
 .block-navy { background: var(--ds-block-navy); color: var(--ds-inverse-ink); }
 
 .quote-block { padding-block: calc(var(--ds-space-section) - var(--ds-space-lg)); }
-.quote-block h2 { max-width: 28ch; }
-.quote-block h2 b { font-weight: 540; }
+/* ch 은 '0' 글자 폭 기준이라 한글에서는 예상보다 좁습니다.
+   논리적 한 줄(quote-line)이 한 줄에 들어가도록 em 으로 잡습니다. */
+.quote-block h2 { max-width: 23em; }
+.quote-line { display: block; }
+/* inline-block 은 안쪽 끝 공백이 잘리므로 어절 간격을 margin 으로 줍니다. */
+.quote-word { display: inline-block; margin-inline-end: 0.26em; }
+.quote-word.strong { font-weight: 540; }
 
 /* --- 01 ABOUT ----------------------------------------- */
 .value-grid {
@@ -257,9 +262,27 @@
   gap: var(--ds-space-xl);
 }
 
-.value {
-  border-top: 1px solid var(--ds-hairline);
+/* 헤어라인은 border 가 아니라 의사요소로 둡니다. 스크롤 연출에서
+   좌→우로 그려지게 scaleX 를 애니메이트하기 위한 것이며, 기본 상태는
+   scaleX(1) 이라 미지원 브라우저에서도 지금과 동일하게 보입니다. */
+/* view-timeline-name: 헤어라인(::after)은 높이가 1px 이라 자기 자신의
+   view() 타임라인을 쓰면 부모보다 훨씬 빨리 끝나 버립니다. 부모가 이름
+   있는 타임라인을 선언하고 ::after 가 그걸 참조해 구간을 맞춥니다. */
+.value, .steps li {
+  position: relative;
   padding-top: var(--ds-space-lg);
+  view-timeline-name: --line-track;
+}
+
+.value::after, .steps li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--ds-hairline);
+  transform-origin: left center;
 }
 
 .value .eyebrow { display: block; margin-bottom: var(--ds-space-xl); }
@@ -267,11 +290,13 @@
 .value span { display: block; margin-top: var(--ds-space-xs); font-size: 16px; font-weight: 330; line-height: 1.45; }
 
 /* --- 02 PROGRAM --------------------------------------- */
+/* 라일락 블록과 카드 사이 여백을 담는 받침. */
+.card-sheet { padding-block: var(--ds-space-section) 0; }
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--ds-space-lg);
-  margin-top: var(--ds-space-section);
 }
 
 .card {
@@ -295,7 +320,6 @@
   padding: 0;
 }
 
-.steps li { border-top: 1px solid var(--ds-hairline); padding-top: var(--ds-space-lg); }
 .steps .eyebrow { display: block; }
 .steps b { display: block; margin-block: var(--ds-space-xl) var(--ds-space-sm); font-size: 24px; font-weight: 700; line-height: 1.45; }
 .steps p { margin: 0; font-size: 16px; font-weight: 330; line-height: 1.45; }
@@ -377,8 +401,149 @@
     border-radius: 0;
     padding: var(--ds-space-xl) var(--ds-space-lg);
   }
-  .card-grid { margin-top: var(--ds-space-xl); }
+  .card-sheet { padding-block: var(--ds-space-xl) 0; }
   .quote-block { padding-block: var(--ds-space-xxl); }
+}
+
+/* ======================================================
+   스크롤 연출 (라이브러리 없음 / 순수 웹 표준)
+   ------------------------------------------------------
+   설계 원칙
+   1. 기본 상태 = 애니메이션이 끝난 모습. 아래 규칙이 전부 빠져도
+      지금과 똑같은 정적 페이지가 됩니다.
+   2. 스크롤 연동은 CSS scroll-driven animation(`animation-timeline`)만
+      사용합니다. JS 스크롤 리스너가 없어 컴포지터에서 처리됩니다.
+      Chrome/Edge 115+, Safari 26+ 지원. Firefox stable 은 아직
+      플래그 뒤이므로 @supports 로 감싼 점진적 향상입니다.
+   3. `prefers-reduced-motion` 을 선언한 사용자에게는 전부 적용하지
+      않습니다.
+   4. transform · opacity 만 애니메이트합니다(레이아웃 재계산 없음).
+   ====================================================== */
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+}
+
+@keyframes draw-line {
+  from { transform: scaleX(0); }
+}
+
+@keyframes hero-copy-exit {
+  to { opacity: 0; transform: translateY(-48px); }
+}
+
+@keyframes hero-mock-drift {
+  to { transform: translateY(-72px); }
+}
+
+/* 기본 상태가 opacity 1 이라 미지원 브라우저에서는 문장이 그냥 다 보입니다. */
+@keyframes word-lit {
+  from { opacity: 0.3; }
+}
+
+/* screen 한정: 인쇄에서는 스크롤이 없어 reveal 요소가 opacity 0 으로
+   찍혀버립니다. 인쇄 시에는 애니메이션 없이 최종 상태가 나옵니다. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* 요소가 뷰포트에 들어오는 구간에 맞춰 올라오며 나타납니다.
+       구간 기준은 entry 가 아니라 cover 입니다. entry 는 길이가 요소
+       높이뿐이라 200px 카드에서는 순식간에 끝나고, cover 는 뷰포트
+       높이까지 포함해 자연스러운 길이가 나옵니다. */
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: cover 4% cover 26%;
+    }
+
+    /* 헤어라인이 좌 → 우로 그려집니다. */
+    .value::after, .steps li::after {
+      animation: draw-line linear both;
+      animation-timeline: --line-track;
+      animation-range: cover 4% cover 24%;
+    }
+
+    /* 같은 행의 형제는 동일한 타임라인을 공유하므로,
+       구간을 어긋나게 잡아 순차 등장을 만듭니다. */
+    .value-grid > .reveal:nth-child(2),
+    .card-grid > .reveal:nth-child(2),
+    .steps > .reveal:nth-child(2) { animation-range: cover 12% cover 34%; }
+
+    .value-grid > .reveal:nth-child(2)::after,
+    .steps > .reveal:nth-child(2)::after { animation-range: cover 12% cover 32%; }
+
+    .value-grid > .reveal:nth-child(3),
+    .card-grid > .reveal:nth-child(3),
+    .steps > .reveal:nth-child(3) { animation-range: cover 20% cover 42%; }
+
+    .value-grid > .reveal:nth-child(3)::after,
+    .steps > .reveal:nth-child(3)::after { animation-range: cover 20% cover 40%; }
+  }
+}
+
+/* 히어로 패럴랙스는 좁은 화면에서 요소가 서로 겹치므로 데스크톱에서만. */
+@media screen and (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .hero-copy {
+      animation: hero-copy-exit linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 80vh;
+    }
+
+    /* 목업이 본문보다 느리게 따라와 깊이가 생깁니다. */
+    .hero-mock {
+      animation: hero-mock-drift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 110vh;
+    }
+  }
+}
+
+/* 인용 블록 핀 고정: 네이비 패널이 화면에 물린 채로, 문장이 어절 단위로
+   차례차례 밝아집니다. 패널을 다른 요소로 덮지 않으므로 글자가 잘리거나
+   컬러블록이 빈 띠로 남는 일이 없고, DESIGN.md 의 "한 뷰포트에 컬러블록
+   하나" 규칙도 지켜집니다.
+   sticky 자체는 Firefox 에서도 동작하며, 어절 밝아짐만 점진적 향상입니다.
+   모바일에서는 핀 체감이 나빠 데스크톱 전용입니다. */
+@media screen and (min-width: 961px) and (prefers-reduced-motion: no-preference) {
+  .quote-track {
+    /* 핀이 물려 있는 스크롤 길이 = 트랙 높이 - 블록 높이 */
+    height: 150vh;
+    view-timeline-name: --quote;
+  }
+
+  .quote-section .quote-block {
+    position: sticky;
+    /* sticky nav(56px) 아래로 여백 한 칸 */
+    top: calc(56px + var(--ds-space-lg));
+    /* 핀 상태에서 패널이 화면 대부분을 차지하게 합니다.
+       기본 높이(약 370px)로는 아래쪽에 흰 여백만 크게 남습니다. */
+    min-height: 68vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @supports (animation-timeline: view()) {
+    .quote-word {
+      animation: word-lit linear both;
+      animation-timeline: --quote;
+    }
+
+    /* 어절마다 구간을 3%씩 밀어 순차 점등을 만듭니다.
+       (inline style 로 인덱스를 넘기지 않기 위해 규칙을 펼쳐 씁니다) */
+    .quote-line:nth-child(1) .quote-word:nth-child(1) { animation-range: cover 38% cover 46%; }
+    .quote-line:nth-child(1) .quote-word:nth-child(2) { animation-range: cover 41% cover 49%; }
+    .quote-line:nth-child(1) .quote-word:nth-child(3) { animation-range: cover 44% cover 52%; }
+    .quote-line:nth-child(1) .quote-word:nth-child(4) { animation-range: cover 47% cover 55%; }
+    .quote-line:nth-child(1) .quote-word:nth-child(5) { animation-range: cover 50% cover 58%; }
+
+    .quote-line:nth-child(2) .quote-word:nth-child(1) { animation-range: cover 54% cover 62%; }
+    .quote-line:nth-child(2) .quote-word:nth-child(2) { animation-range: cover 57% cover 65%; }
+    .quote-line:nth-child(2) .quote-word:nth-child(3) { animation-range: cover 60% cover 68%; }
+    .quote-line:nth-child(2) .quote-word:nth-child(4) { animation-range: cover 63% cover 71%; }
+    .quote-line:nth-child(2) .quote-word:nth-child(5) { animation-range: cover 66% cover 74%; }
+    .quote-line:nth-child(2) .quote-word:nth-child(6) { animation-range: cover 69% cover 77%; }
+  }
 }
 
 @media (max-width: 560px) {

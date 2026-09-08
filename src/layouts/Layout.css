@@ -1,7 +1,11 @@
 /* 공통 nav/footer — docs/DESIGN.md 의 top-nav · footer 컴포넌트 구현.
    흰 캔버스 위 모노크롬 크롬, CTA는 필(pill) 형태만 사용합니다. */
 
-.site-shell { overflow-x: hidden; background: var(--ds-canvas); color: var(--ds-ink); }
+/* overflow-x 는 hidden 이 아니라 clip 이어야 합니다. hidden 은 이 요소를
+   스크롤 컨테이너로 만들어(overflow-y 가 auto 로 계산됨) 자손의
+   scroll-driven animation 타임라인을 비활성화시킵니다. clip 은 스크롤
+   컨테이너를 만들지 않으면서 풀블리드 요소의 가로 넘침만 잘라냅니다. */
+.site-shell { overflow-x: clip; background: var(--ds-canvas); color: var(--ds-ink); }
 
 /* --- top-nav ------------------------------------------ */
 .nav {
@@ -16,7 +20,19 @@
   max-width: calc(1280px + var(--ds-space-xxl) * 2);
   margin-inline: auto;
   padding-inline: var(--ds-space-xxl);
+}
+
+/* nav 는 내용 폭이 컨테이너(1280px)에 맞춰 제한되지만, sticky 이므로
+   배경은 뷰포트 전체 폭이어야 합니다. 그러지 않으면 좌우 여백으로
+   아래를 지나가는 마퀴 스트립·컬러블록이 그대로 보입니다. */
+.nav::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
   background: var(--ds-canvas);
+  z-index: -1;
 }
 
 .logo {
