@@ -1,5 +1,5 @@
 /* 공통 nav/footer — docs/DESIGN.md 의 top-nav · footer 컴포넌트 구현.
-   2026 리디자인: 다크 에디터 표면 위의 얇은 크롬. nav 는 에디터 탭바,
+   2026 리디자인: 흰 캔버스 위의 얇은 크롬. nav 는 에디터 탭바,
    footer 는 상태 표시줄처럼 읽히도록 헤어라인과 모노 타이포만 씁니다. */
 
 /* overflow-x 는 hidden 이 아니라 clip 이어야 합니다. hidden 은 이 요소를
@@ -46,13 +46,14 @@
   letter-spacing: -0.02em;
 }
 
-/* 로고의 세미콜론만 포스터 그린으로 칠합니다. */
+/* 로고의 세미콜론만 포스터 그린으로 칠합니다.
+   흰 배경 위 글자라 라임(#a6de4e)은 읽히지 않아 진한 그린을 씁니다. */
 .logo span {
   font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
   line-height: 1;
-  color: var(--ds-poster-lime);
+  color: var(--ds-poster-green-ink);
 }
 
 .nav-links {

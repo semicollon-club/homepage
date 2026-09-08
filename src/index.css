@@ -14,49 +14,62 @@
   --color-green: #188b4c;    /* 포인트 (그린) */
 
   /* --- 디자인 시스템 토큰 (docs/DESIGN.md) ---------------------
-     2026 리디자인 프로토타입: 파스텔 컬러블록을 걷어내고
-     '코드 에디터 다크 표면 + 모집 포스터 그린 그라디언트'로 갑니다.
-     포인트 색은 에디터 다크 테마의 구문 강조색을 그대로 씁니다.
+     2026 리디자인: 캔버스는 기존과 같은 흰색으로 두고, 파스텔 컬러블록만
+     걷어냅니다. 포인트 색은 코드 에디터 '라이트 테마' 구문 강조색 —
+     흰 배경에서 대비가 나오는 채도 높은 진한 원색입니다.
+     인용 패널 한 곳만 다크로 반전되며, 그 안에서는 같은 코드가
+     다크 테마 구문색으로 보입니다(아래 *-dark 토큰).
      랜딩(/)·소개(/about)와 공통 nav/footer가 이 토큰을 씁니다. */
-  --ds-ink: #d4d4d4;            /* 기본 글자 */
-  --ds-ink-soft: #8a8a8a;       /* 보조 글자 */
-  --ds-canvas: #1e1e1e;         /* 기본 캔버스 (에디터 본문) */
-  --ds-surface: #181818;        /* 패널·사이드바 면 */
-  --ds-surface-soft: #232323;   /* 살짝 뜬 타일 */
+  --ds-ink: #000000;            /* 기본 글자 */
+  --ds-ink-soft: #55585c;       /* 보조 글자 */
+  --ds-canvas: #ffffff;         /* 기본 캔버스 */
+  --ds-surface: #ffffff;        /* 카드 면 (헤어라인으로 구분) */
+  --ds-surface-soft: #f7f7f5;   /* 오프화이트 타일 */
   --ds-on-primary: #0d0d0d;     /* 원색·그라디언트 면 위 글자 */
-  --ds-inverse-canvas: #0d0d0d; /* 마퀴 스트립 등 반전 면 */
-  --ds-inverse-ink: #f2f2f2;
-  --ds-hairline: #333333;       /* 1px 테두리 */
-  --ds-hairline-soft: #2a2a2a;  /* 더 옅은 구분선 */
+  --ds-inverse-canvas: #101418; /* 반전 면 */
+  --ds-inverse-ink: #ffffff;
+  --ds-hairline: #e6e6e6;       /* 1px 테두리 */
+  --ds-hairline-soft: #f1f1f1;  /* 더 옅은 구분선 */
+  --ds-gutter: #767676;         /* 에디터 줄 번호 (흰 배경 대비 4.5:1) */
 
-  /* 구문 강조 포인트 색 (채도 높은 원색 계열) */
-  --ds-syntax-keyword: #569cd6; /* 키워드 파랑 */
-  --ds-syntax-prop: #9cdcfe;    /* 속성 밝은 파랑 */
-  --ds-syntax-type: #4ec9b0;    /* 타입 청록 */
-  --ds-syntax-control: #c586c0; /* 제어문 보라 */
-  --ds-syntax-string: #ce9178;  /* 문자열 */
-  --ds-syntax-number: #b5cea8;  /* 숫자 */
-  --ds-syntax-comment: #6a9955; /* 주석 초록 */
-  --ds-syntax-link: #3794ff;    /* 링크 파랑 */
-  --ds-syntax-error: #f14c4c;   /* 오류 빨강 (경고·마감 임박 등 강한 알림) */
-  --ds-syntax-select: #264f78;  /* 선택 영역 */
+  /* 구문 강조 포인트 색 — 라이트 테마. 전부 흰 배경 대비 4.5:1 이상. */
+  --ds-syntax-keyword: #0b4fd6; /* 키워드 파랑 (6.8:1) */
+  --ds-syntax-prop: #0f4fa8;    /* 속성·값 파랑 (7.8:1) */
+  --ds-syntax-type: #0f7a86;    /* 타입 청록 (5.1:1) */
+  --ds-syntax-control: #a300c4; /* 제어문 보라 (6.3:1) */
+  --ds-syntax-string: #b32222;  /* 문자열 빨강 (6.6:1) */
+  --ds-syntax-number: #0b7a3e;  /* 숫자 초록 (5.4:1) */
+  --ds-syntax-comment: #087f2f; /* 주석 초록 (5.1:1) */
+  --ds-syntax-link: #0a58ca;    /* 링크 파랑 (6.4:1) */
+  --ds-syntax-error: #d01717;   /* 오류 빨강 (5.5:1, 마감 임박 등 강한 알림) */
+  --ds-syntax-select: #add6ff;  /* 선택 영역 (검정 글자 기준) */
+
+  /* 반전 패널 안에서만 쓰는 다크 테마 구문색 */
+  --ds-syntax-keyword-dark: #569cd6;
+  --ds-syntax-type-dark: #4ec9b0;
+  --ds-syntax-comment-dark: #6a9955;
+  --ds-syntax-string-dark: #ce9178;
 
   /* 모집 포스터 그린 (CTA·마퀴·히어로 패널 전용) */
   --ds-poster-green: #17a673;
   --ds-poster-lime: #a6de4e;
   --ds-poster-gradient: linear-gradient(104deg, var(--ds-poster-green), var(--ds-poster-lime));
+  /* 흰 배경 위 '글자'로 쓰는 그린. 라임은 흰 바탕에서 읽히지 않습니다. */
+  --ds-poster-green-ink: #0d7d57;
+  --ds-poster-gradient-ink: linear-gradient(104deg, var(--ds-poster-green-ink), var(--ds-poster-green));
 
-  /* 컬러블록: 파스텔 → 구문색 계열 다크 패널.
-     토큰 이름은 기존 사용처(/about)와의 호환을 위해 유지합니다. */
-  --ds-block-lime: #17251a;
-  --ds-block-lilac: #221a2b;
-  --ds-block-cream: #24201a;
-  --ds-block-pink: #2a1620;
-  --ds-block-mint: #12262a;
-  --ds-block-coral: #2a1a17;
-  --ds-block-navy: #14181f;
-  --ds-accent-magenta: #c586c0; /* 프로모션 전용, 페이지당 1회 */
-  --ds-success: #4ec9b0;
+  /* 컬러블록: 파스텔 면을 걷어내고 중립 면 + 구문색 액센트 바로 갑니다.
+     구분은 채워진 색이 아니라 왼쪽 액센트 색이 만듭니다.
+     토큰 이름은 기존 사용처와의 호환을 위해 유지합니다. */
+  --ds-block-lime: #f7f7f5;
+  --ds-block-lilac: #f7f7f5;
+  --ds-block-cream: #f7f7f5;
+  --ds-block-pink: #f7f7f5;
+  --ds-block-mint: #f7f7f5;
+  --ds-block-coral: #f7f7f5;
+  --ds-block-navy: #101418;     /* 페이지에서 유일한 반전 면 */
+  --ds-accent-magenta: #c2007a; /* 프로모션 전용, 페이지당 1회 */
+  --ds-success: #0b7a3e;
 
   /* 라운드 스케일 */
   --ds-radius-xs: 2px;
@@ -89,7 +102,7 @@
   font-feature-settings: 'kern' 1;
   background: var(--ds-canvas);
   color: var(--ds-ink);
-  color-scheme: dark;
+  color-scheme: light;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -100,7 +113,7 @@ body { margin: 0; min-width: 320px; background: var(--ds-canvas); }
 button, a { font: inherit; }
 button { cursor: pointer; border: 0; }
 a { color: inherit; text-decoration: none; }
-::selection { background: var(--ds-syntax-select); color: var(--ds-inverse-ink); }
+::selection { background: var(--ds-syntax-select); color: var(--ds-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
