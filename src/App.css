@@ -1,9 +1,13 @@
-/* 랜딩(/) 페이지 스타일 — docs/DESIGN.md 디자인 시스템 구현.
-   모노크롬 캔버스 + 오버사이즈 파스텔 컬러블록.
+/* docs/DESIGN.md 디자인 시스템 구현 — 모노크롬 캔버스 + 오버사이즈 파스텔 컬러블록.
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
-   공통 nav/footer는 layouts/Layout.css 참조. */
+   공통 nav/footer는 layouts/Layout.css 참조.
 
-.landing {
+   이 파일은 랜딩(/) 전용이 아니라 이 시스템을 쓰는 페이지의 공용
+   스타일시트입니다. 페이지 루트에 `.ds-page` 를 달면 캔버스·타이포·
+   컬러블록·필 버튼·.reveal 연출을 그대로 받습니다(현재 / 와 /about).
+   페이지 고유 스타일은 각 페이지의 .css 에 둡니다. */
+
+.ds-page {
   background: var(--ds-canvas);
   color: var(--ds-ink);
   max-width: calc(1280px + var(--ds-space-xxl) * 2);
@@ -14,11 +18,11 @@
 /* --- 타이포그래피 역할 ---------------------------------- */
 /* 한글은 라틴보다 글자폭이 넓어 DESIGN.md 의 86px/64px 을 그대로 쓰면 줄이 넘칩니다.
    비율은 유지하고 상한만 낮췄으며, keep-all 로 어절 중간 줄바꿈을 막습니다. */
-.landing h1, .landing h2, .landing h3, .landing p, .landing strong, .landing b {
+.ds-page h1, .ds-page h2, .ds-page h3, .ds-page p, .ds-page strong, .ds-page b {
   word-break: keep-all;
 }
 
-.landing h1 {
+.ds-page h1 {
   font-size: clamp(42px, 5vw, 72px);
   font-weight: 340;
   line-height: 1.05;
@@ -26,7 +30,7 @@
   margin: 0;
 }
 
-.landing h2 {
+.ds-page h2 {
   font-size: clamp(32px, 4vw, 56px);
   font-weight: 340;
   line-height: 1.12;
@@ -34,7 +38,7 @@
   margin: 0;
 }
 
-.landing h3 {
+.ds-page h3 {
   font-size: 24px;
   font-weight: 700;
   line-height: 1.45;
@@ -117,6 +121,10 @@
 /* 인접 섹션의 위·아래 패딩이 합쳐져 DESIGN.md 의 리듬 상수 96px 이 됩니다. */
 .section { padding-block: calc(var(--ds-space-section) / 2); }
 .section > .eyebrow { margin-bottom: var(--ds-space-lg); }
+
+/* 해시 딥링크(/#apply, /about#program)로 들어왔을 때 sticky nav(56px)가
+   섹션 머리를 덮지 않도록 여백을 둡니다. */
+.section[id] { scroll-margin-top: calc(56px + var(--ds-space-lg)); }
 
 .section-head {
   display: grid;
@@ -244,6 +252,7 @@
 .block-lilac { background: var(--ds-block-lilac); }
 .block-coral { background: var(--ds-block-coral); }
 .block-lime { background: var(--ds-block-lime); }
+.block-mint { background: var(--ds-block-mint); }
 .block-navy { background: var(--ds-block-navy); color: var(--ds-inverse-ink); }
 
 .quote-block { padding-block: calc(var(--ds-space-section) - var(--ds-space-lg)); }
@@ -390,7 +399,7 @@
 }
 
 @media (max-width: 768px) {
-  .landing { padding-inline: var(--ds-space-lg); }
+  .ds-page { padding-inline: var(--ds-space-lg); }
   .section { padding-block: calc(var(--ds-space-section) / 2 * 0.75); }
   /* 항목이 3개라 2열은 한 칸이 남습니다. 3열 → 1열로 바로 접습니다. */
   .value-grid, .card-grid, .steps { grid-template-columns: minmax(0, 1fr); }

@@ -1,20 +1,12 @@
 import { useState } from 'react'
 import './App.css'
+import Link from './components/Link'
 
 // 실제 부원 모집 링크가 준비되면 VITE_SEMICOLON_APPLICATION_URL에 설정하세요.
 const applicationUrl = import.meta.env.VITE_SEMICOLON_APPLICATION_URL || 'https://forms.google.com/'
 
-const programs = [
-  { no: '01', title: '같이 배우는 스터디', text: '처음이라도 괜찮아요. 서로의 속도를 존중하며 웹, 앱, AI를 함께 익혀요.' },
-  { no: '02', title: '끝까지 만드는 프로젝트', text: '아이디어를 화면으로, 코드를 서비스로. 협업의 전 과정을 직접 경험해요.' },
-  { no: '03', title: '성장을 나누는 커뮤니티', text: '막혔을 때 물어볼 동료, 완성했을 때 기뻐할 팀이 곁에 있어요.' },
-]
-
-const values = [
-  { label: 'LEARN', title: '배움은 가볍게', text: '기초부터 차근차근' },
-  { label: 'BUILD', title: '만듦은 치열하게', text: '아이디어를 결과물로' },
-  { label: 'GROW', title: '성장은 함께', text: '나누며 더 멀리' },
-]
+// 동아리 소개(ABOUT)와 활동(WHAT WE DO) 본문은 /about 페이지로 옮겼습니다.
+// 콘텐츠는 src/data/about.ts, 화면은 src/pages/AboutPage.tsx 를 보세요.
 
 const steps = [
   { label: 'STEP 01', title: '지원서 작성', text: '나를 소개하는 이야기를 편하게 들려주세요.' },
@@ -46,7 +38,7 @@ function App() {
   const scrollToApply = () => document.querySelector('#apply')?.scrollIntoView({ behavior: 'smooth' })
 
   return (
-    <main id="top" className="landing">
+    <main id="top" className="ds-page">
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">2026 · CHEONGWOON UNIV · CODING CLUB</p>
@@ -58,7 +50,7 @@ function App() {
           </p>
           <div className="cta-row">
             <button className="pill pill-primary" onClick={scrollToApply}>세미콜론 지원하기</button>
-            <a className="pill pill-tertiary" href="#about">더 알아보기 ↓</a>
+            <Link className="pill pill-tertiary" to="/about">세미콜론 알아보기 →</Link>
           </div>
         </div>
 
@@ -86,43 +78,18 @@ function App() {
         </div>
       </div>
 
-      <section className="section" id="about">
+      {/* 소개·활동 본문은 /about 으로 분리했습니다. 여기에는 요약과 링크만 둡니다.
+          id="about" 은 기존 /#about 딥링크가 깨지지 않도록 남겨둡니다. */}
+      <section className="section about-teaser" id="about">
         <p className="eyebrow">01 — ABOUT US</p>
         <div className="section-head reveal">
           <h2>좋은 코드는,<br />좋은 동료에게서 시작됩니다.</h2>
           <p className="subhead">
             혼자서는 막막했던 한 줄의 코드도, 함께라면 새로운 가능성이 됩니다.
-            세미콜론은 기술과 사람 사이를 잇는 가장 즐거운 시작점이 되고자 합니다.
+            우리가 어떤 마음으로 모이고 무엇을 만드는지 소개 페이지에 담았어요.
           </p>
         </div>
-        <div className="value-grid">
-          {values.map((item) => (
-            <div className="value reveal" key={item.label}>
-              <b className="eyebrow">{item.label}</b>
-              <strong>{item.title}</strong>
-              <span>{item.text}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="section" id="program">
-        <div className="block block-lilac">
-          <p className="eyebrow">02 — WHAT WE DO</p>
-          <h2>코드 너머의<br />경험을 만듭니다.</h2>
-          <p className="subhead">완성도 있는 결과물과 오래 남는 동료를 동시에 만드는 활동들.</p>
-        </div>
-        <div className="card-sheet">
-          <div className="card-grid">
-            {programs.map((item) => (
-              <article className="card reveal" key={item.no}>
-                <span className="eyebrow">{item.no}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
+        <Link className="pill pill-primary" to="/about">동아리 소개 보기 →</Link>
       </section>
 
       <section className="section quote-section">
