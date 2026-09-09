@@ -53,10 +53,11 @@ function App() {
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">2026 · CHEONGWOON UNIV · CODING CLUB</p>
-          {/* 헤드라인은 에디터 본문처럼 줄 번호를 달고, 강조어에 구문 강조색을 씁니다. */}
+          {/* 헤드라인은 에디터 본문처럼 줄 번호를 달고, 강조어는 드래그 선택처럼
+              그린 틴트로 칠합니다(.tok-hl). 페이지에서 한 번만 쓰는 서명입니다. */}
           <h1 className="hero-title">
             <span className="hero-line"><i className="ln">01</i>혼자 배우던 코딩을,</span>
-            <span className="hero-line"><i className="ln">02</i><em className="tok-string">‘함께’</em> 완성하는</span>
+            <span className="hero-line"><i className="ln">02</i><em className="tok-hl">‘함께’</em> 완성하는</span>
             <span className="hero-line"><i className="ln">03</i>진짜 프로젝트로<em className="tok-semi">;</em></span>
           </h1>
           <p className="lead">

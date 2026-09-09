@@ -1,8 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Inter:opsz,wght@14..32,300..700&family=JetBrains+Mono:wght@400;500;700&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap');
 
 /* 디자인 토큰 -----------------------------------------------
    색상·폰트는 반드시 아래 변수로 사용합니다. (AGENTS.md 참조)
-   새 색상이 필요하면 임의 hex 대신 여기에 토큰을 추가하세요. */
+   새 색상이 필요하면 임의 hex 대신 여기에 토큰을 추가하세요.
+
+   === 디자인 규칙 (2026-09 확정) ==========================
+   1. 파스텔 금지. 옅은 틴트 면을 만들지 않습니다. 면은 흰색이거나
+      원색 그린(#17a673)이거나 딥 파인(#062a1e), 셋 중 하나입니다.
+   2. 그라디언트 금지. 채워진 면은 전부 단색입니다. 줄무늬·글자
+      그라디언트(background-clip: text)도 쓰지 않습니다.
+   3. 내용이 바뀌는 지점에는 반드시 구분선 또는 구분 면을 둡니다.
+      섹션 경계 = 원색 그린 1px 풀블리드 라인(--ds-accent-line),
+      카드·목록 내부 경계 = 중성 회색 1px(--ds-hairline).
+   4. 폰트는 역할별로 나누되 IBM Plex 한 superfamily 안에서만
+      고릅니다. 본문 Sans KR, 라벨·데이터·디스플레이 Mono.
+   ======================================================== */
 :root {
   /* --- 레거시 팔레트 (조직도·지원안내·로그인·404 페이지에서 사용 중) --- */
   --color-bg: #f6f1e9;       /* 기본 배경 (크림) */
@@ -14,62 +26,64 @@
   --color-green: #188b4c;    /* 포인트 (그린) */
 
   /* --- 디자인 시스템 토큰 (docs/DESIGN.md) ---------------------
-     2026 리디자인: 캔버스는 기존과 같은 흰색으로 두고, 파스텔 컬러블록만
-     걷어냅니다. 포인트 색은 코드 에디터 '라이트 테마' 구문 강조색 —
-     흰 배경에서 대비가 나오는 채도 높은 진한 원색입니다.
-     인용 패널 한 곳만 다크로 반전되며, 그 안에서는 같은 코드가
-     다크 테마 구문색으로 보입니다(아래 *-dark 토큰).
+     흰 캔버스 + 모집 포스터의 그린 한 색. 포인트 색은 버튼 전용이
+     아니라 페이지 전체를 관통합니다 — 라벨, 줄 번호, 강조어,
+     섹션 구분선, 블록 액센트 바, 반전 패널까지 전부 같은 그린입니다.
      랜딩(/)·소개(/about)와 공통 nav/footer가 이 토큰을 씁니다. */
   --ds-ink: #000000;            /* 기본 글자 */
-  --ds-ink-soft: #55585c;       /* 보조 글자 */
+  --ds-ink-soft: #4f5f57;       /* 보조 글자 (그린 쪽으로 살짝 기운 회색) */
   --ds-canvas: #ffffff;         /* 기본 캔버스 */
-  --ds-surface: #ffffff;        /* 카드 면 (헤어라인으로 구분) */
-  --ds-surface-soft: #f7f7f5;   /* 오프화이트 타일 */
-  --ds-on-primary: #0d0d0d;     /* 원색·그라디언트 면 위 글자 */
-  --ds-inverse-canvas: #101418; /* 반전 면 */
+  --ds-surface: #ffffff;        /* 카드 면 (틴트 없이 선으로만 구분) */
+  --ds-surface-soft: #ffffff;   /* 타일 면 — 옅은 틴트 금지(규칙 1) */
+  --ds-on-primary: #0d0d0d;     /* 원색 그린 면 위 글자 (대비 7.2:1) */
+  --ds-inverse-canvas: #062a1e; /* 반전 면 (딥 파인) */
   --ds-inverse-ink: #ffffff;
-  --ds-hairline: #e6e6e6;       /* 1px 테두리 */
-  --ds-hairline-soft: #f1f1f1;  /* 더 옅은 구분선 */
-  --ds-gutter: #767676;         /* 에디터 줄 번호 (흰 배경 대비 4.5:1) */
+  --ds-inverse-ink-soft: #c8cdcb; /* 반전 면 보조 글자 — 중성 회색 */
+  --ds-hairline: #d7d7d7;       /* 중성 1px 경계 (카드·목록 내부) */
+  --ds-hairline-soft: #e6e6e6;  /* 더 옅은 중성 경계 */
+  --ds-gutter: #6b6b6b;         /* 에디터 줄 번호 (흰 배경 대비 5.7:1) */
 
-  /* 구문 강조 포인트 색 — 라이트 테마. 전부 흰 배경 대비 4.5:1 이상. */
-  --ds-syntax-keyword: #0b4fd6; /* 키워드 파랑 (6.8:1) */
-  --ds-syntax-prop: #0f4fa8;    /* 속성·값 파랑 (7.8:1) */
-  --ds-syntax-type: #0f7a86;    /* 타입 청록 (5.1:1) */
-  --ds-syntax-control: #a300c4; /* 제어문 보라 (6.3:1) */
-  --ds-syntax-string: #b32222;  /* 문자열 빨강 (6.6:1) */
-  --ds-syntax-number: #0b7a3e;  /* 숫자 초록 (5.4:1) */
-  --ds-syntax-comment: #087f2f; /* 주석 초록 (5.1:1) */
-  --ds-syntax-link: #0a58ca;    /* 링크 파랑 (6.4:1) */
-  --ds-syntax-error: #d01717;   /* 오류 빨강 (5.5:1, 마감 임박 등 강한 알림) */
-  --ds-syntax-select: #add6ff;  /* 선택 영역 (검정 글자 기준) */
+  /* --- 그린 램프 ---------------------------------------------
+     전부 포스터 그린(#17a673)·라임(#a6de4e)에서 뽑은 한 색조입니다.
+     채도를 낮춘 틴트 단계(50/100/200)는 규칙 1에 따라 삭제했습니다. */
+  --ds-green-950: #062a1e;   /* 반전 패널 바닥 */
+  --ds-green-800: #0a5c40;   /* 강한 강조 글자 (8.0:1) */
+  --ds-green-700: #0d7d57;   /* 기본 액센트 글자 (5.1:1) */
+  --ds-green-600: #17a673;   /* 포스터 그린 — 채워진 면·구분선 */
+  --ds-green-400: #a6de4e;   /* 포스터 라임 — 반전 면 위에서만 */
 
-  /* 반전 패널 안에서만 쓰는 다크 테마 구문색 */
-  --ds-syntax-keyword-dark: #569cd6;
-  --ds-syntax-type-dark: #4ec9b0;
-  --ds-syntax-comment-dark: #6a9955;
-  --ds-syntax-string-dark: #ce9178;
+  /* 역할 토큰 — 컴포넌트는 램프 대신 이쪽을 참조합니다. */
+  --ds-accent: var(--ds-green-700);
+  --ds-accent-strong: var(--ds-green-800);
+  --ds-accent-fill: var(--ds-green-600);
+  --ds-accent-bright: var(--ds-green-400);
+  /* 섹션 경계선. 원색 그린 1px 이 페이지를 가로지르며 내용 전환을
+     알립니다(규칙 3). 면이 아니라 선이라 톤이 뜨지 않습니다. */
+  --ds-accent-line: var(--ds-green-600);
+  /* 강조어 배경·드래그 선택 — 틴트가 아니라 원색 그린 면입니다. */
+  --ds-accent-tint: var(--ds-green-600);
+  --ds-accent-surface: var(--ds-green-600);
+  /* 페이지에서 유일한 비(非)그린. 모집 마감처럼 의미가 있는 알림에만
+     쓰고 페이지당 1회를 넘기지 않습니다. */
+  --ds-alert: #d01717;
 
-  /* 모집 포스터 그린 (CTA·마퀴·히어로 패널 전용) */
-  --ds-poster-green: #17a673;
-  --ds-poster-lime: #a6de4e;
-  --ds-poster-gradient: linear-gradient(104deg, var(--ds-poster-green), var(--ds-poster-lime));
-  /* 흰 배경 위 '글자'로 쓰는 그린. 라임은 흰 바탕에서 읽히지 않습니다. */
-  --ds-poster-green-ink: #0d7d57;
-  --ds-poster-gradient-ink: linear-gradient(104deg, var(--ds-poster-green-ink), var(--ds-poster-green));
+  /* 포스터 색. 그라디언트는 규칙 2에 따라 삭제했고, 채워진 면은
+     단색 그린, 흰 배경 위 글자는 램프의 진한 단계를 씁니다. */
+  --ds-poster-green: var(--ds-green-600);
+  --ds-poster-lime: var(--ds-green-400);
+  --ds-poster-green-ink: var(--ds-green-700);
 
-  /* 컬러블록: 파스텔 면을 걷어내고 중립 면 + 구문색 액센트 바로 갑니다.
-     구분은 채워진 색이 아니라 왼쪽 액센트 색이 만듭니다.
+  /* 컬러블록: 틴트 면을 쓰지 않습니다. 전부 흰 면이고, 블록끼리의
+     구분은 왼쪽 액센트 바의 깊이(fill → accent → strong)가 냅니다.
      토큰 이름은 기존 사용처와의 호환을 위해 유지합니다. */
-  --ds-block-lime: #f7f7f5;
-  --ds-block-lilac: #f7f7f5;
-  --ds-block-cream: #f7f7f5;
-  --ds-block-pink: #f7f7f5;
-  --ds-block-mint: #f7f7f5;
-  --ds-block-coral: #f7f7f5;
-  --ds-block-navy: #101418;     /* 페이지에서 유일한 반전 면 */
-  --ds-accent-magenta: #c2007a; /* 프로모션 전용, 페이지당 1회 */
-  --ds-success: #0b7a3e;
+  --ds-block-lime: var(--ds-surface);
+  --ds-block-lilac: var(--ds-surface);
+  --ds-block-cream: var(--ds-surface);
+  --ds-block-pink: var(--ds-surface);
+  --ds-block-mint: var(--ds-surface);
+  --ds-block-coral: var(--ds-surface);
+  --ds-block-navy: var(--ds-green-950);  /* 페이지에서 유일한 반전 면 */
+  --ds-success: var(--ds-green-700);
 
   /* 라운드 스케일 */
   --ds-radius-xs: 2px;
@@ -92,11 +106,12 @@
 
   --ds-container: 1280px;
 
-  /* 폰트: 본문 한글은 IBM Plex Sans KR, 코드·라벨은 JetBrains Mono,
-     포스터의 도트 활자를 받는 디스플레이는 Pixelify Sans 입니다. */
-  --font-sans: 'IBM Plex Sans KR', 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', menlo, monospace;
-  --font-display: 'Pixelify Sans', 'JetBrains Mono', monospace;
+  /* 폰트(규칙 4): IBM Plex 한 superfamily 안에서 역할만 나눕니다.
+     본문·제목은 Sans KR, 라벨·줄 번호·데이터·디스플레이는 Mono.
+     두 얼굴이 같은 골격을 공유해 섞여도 톤이 어긋나지 않습니다. */
+  --font-sans: 'IBM Plex Sans KR', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', menlo, monospace;
+  --font-display: 'IBM Plex Mono', 'SF Mono', menlo, monospace;
 
   font-family: var(--font-sans);
   font-feature-settings: 'kern' 1;
@@ -113,7 +128,9 @@ body { margin: 0; min-width: 320px; background: var(--ds-canvas); }
 button, a { font: inherit; }
 button { cursor: pointer; border: 0; }
 a { color: inherit; text-decoration: none; }
-::selection { background: var(--ds-syntax-select); color: var(--ds-ink); }
+/* 드래그 선택도 같은 그린입니다. 페이지 안에서 손이 닿는 모든 곳이
+   한 색으로 반응합니다. */
+::selection { background: var(--ds-accent-tint); color: var(--ds-on-primary); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
