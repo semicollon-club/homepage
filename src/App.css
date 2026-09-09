@@ -40,13 +40,20 @@
   margin: 0;
 }
 
+/* 섹션 제목은 검정이 아니라 포인트 그린입니다. 페이지에서 가장 큰
+   글자가 곧 가장 큰 색 면이 되도록, 색을 버튼이 아니라 제목에 씁니다.
+   흰 배경 위 대비 5.1:1 로 본문 크기에서도 안전한 단계입니다. */
 .ds-page h2 {
   font-size: clamp(30px, 3.8vw, 52px);
   font-weight: 600;
   line-height: 1.18;
   letter-spacing: -0.025em;
   margin: 0;
+  color: var(--ds-accent);
 }
+
+/* 반전 패널·그린 면 위에서는 제목이 면 색을 그대로 받습니다. */
+.block-navy h2 { color: var(--ds-inverse-ink); }
 
 .ds-page h3 {
   font-size: 22px;
@@ -207,7 +214,7 @@
 /* --- 히어로 ------------------------------------------- */
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
   gap: var(--ds-space-xxl);
   align-items: center;
   padding-block: var(--ds-space-xxl) var(--ds-space-section);
@@ -219,6 +226,10 @@
 /* 헤드라인 = 에디터 본문. 왼쪽 거터에 줄 번호가 붙습니다. */
 .hero-title { padding-left: 52px; }
 .hero-line { display: block; position: relative; }
+
+/* 헤드라인의 마지막 줄 전체를 그린으로 넘깁니다. 문장이 검정에서
+   그린으로 바뀌며 끝나고, 그 색이 아래 섹션 제목으로 이어집니다. */
+.hero-line:last-child { color: var(--ds-accent); }
 
 .hero-line .ln {
   position: absolute;
@@ -324,7 +335,8 @@
 .marquee {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  height: 34px;
+  /* 얇은 띠가 아니라 화면을 가로지르는 큰 그린 면입니다. */
+  height: clamp(56px, 6vw, 76px);
   background: var(--ds-accent-fill);
   color: var(--ds-on-primary);
   display: flex;
@@ -337,10 +349,10 @@
 .marquee-group i {
   font-family: var(--font-mono);
   font-style: normal;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  padding-inline: var(--ds-space-lg);
+  font-size: clamp(15px, 1.6vw, 22px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding-inline: var(--ds-space-xl);
 }
 .marquee-group i::after { content: ' ;'; }
 
@@ -486,7 +498,32 @@
 
 .promo-banner p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; }
 
-.apply-block .pill-primary { margin-top: var(--ds-space-xl); }
+/* 지원 섹션은 페이지에서 가장 큰 그린 면입니다. 선으로만 나뉘던
+   흰 페이지가 여기서 통째로 색으로 뒤집히고, 그 면이 곧 CTA 입니다. */
+.apply-block {
+  background: var(--ds-accent-fill);
+  color: var(--ds-on-primary);
+  border-color: var(--ds-accent-fill);
+  border-left-color: var(--ds-green-950);
+  padding-block: var(--ds-space-section);
+}
+
+.apply-block .eyebrow,
+.apply-block h2,
+.apply-block .subhead,
+.apply-block small { color: var(--ds-on-primary); }
+
+.apply-block > .eyebrow { border-bottom-color: var(--ds-on-primary); }
+
+/* 그린 면 위에서는 버튼이 반대로 딥 파인 면이 됩니다. */
+.apply-block .pill-primary {
+  margin-top: var(--ds-space-xl);
+  background: var(--ds-green-950);
+  color: var(--ds-inverse-ink);
+}
+
+.apply-block .pill-primary:focus-visible { outline-color: var(--ds-green-950); }
+
 .apply-block small {
   display: block;
   margin-top: var(--ds-space-sm);
@@ -494,7 +531,6 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ds-ink-soft);
 }
 
 /* --- 05 FAQ ------------------------------------------- */
