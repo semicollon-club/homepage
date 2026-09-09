@@ -1,6 +1,13 @@
-/* 2026 리디자인 프로토타입 — 흰 캔버스 + 코드 에디터 라이트 테마 구문색.
-   배경은 기존과 같은 흰색을 유지하고, 파스텔 컬러블록만 걷어냅니다
-   (docs/DESIGN.md 갱신 예정).
+/* 2026 리디자인 — 흰 캔버스 + 모집 포스터 그린 한 색.
+   배경은 기존과 같은 흰색을 유지합니다. 그린은 버튼 전용이 아니라
+   라벨·줄 번호·강조어·구분선·블록 액센트·반전 패널까지 페이지 전체를
+   관통하는 포인트 색입니다 (docs/DESIGN.md 갱신 예정).
+
+   디자인 규칙(index.css 상단 참조)을 이 파일에도 그대로 적용합니다.
+   1. 파스텔 틴트 면 없음 — 면은 흰색·원색 그린·딥 파인 셋뿐입니다.
+   2. 그라디언트 없음 — 채워진 면은 전부 단색입니다.
+   3. 섹션이 바뀔 때마다 풀블리드 그린 1px 구분선을 둡니다.
+   4. 폰트는 IBM Plex Sans KR / IBM Plex Mono 두 역할뿐입니다.
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
    공통 nav/footer는 layouts/Layout.css 참조.
 
@@ -33,13 +40,20 @@
   margin: 0;
 }
 
+/* 섹션 제목은 검정이 아니라 포인트 그린입니다. 페이지에서 가장 큰
+   글자가 곧 가장 큰 색 면이 되도록, 색을 버튼이 아니라 제목에 씁니다.
+   흰 배경 위 대비 5.1:1 로 본문 크기에서도 안전한 단계입니다. */
 .ds-page h2 {
   font-size: clamp(30px, 3.8vw, 52px);
   font-weight: 600;
   line-height: 1.18;
   letter-spacing: -0.025em;
   margin: 0;
+  color: var(--ds-accent);
 }
+
+/* 반전 패널·그린 면 위에서는 제목이 면 색을 그대로 받습니다. */
+.block-navy h2 { color: var(--ds-inverse-ink); }
 
 .ds-page h3 {
   font-size: 22px;
@@ -48,7 +62,8 @@
   margin: 0;
 }
 
-/* 섹션 라벨은 코드 주석처럼 읽힙니다. */
+/* 섹션 라벨은 코드 주석처럼 읽힙니다. 페이지의 모든 섹션 머리에
+   같은 그린이 반복되면서 스크롤 내내 포인트 색이 이어집니다. */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -56,7 +71,7 @@
   line-height: 1.3;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ds-syntax-comment);
+  color: var(--ds-accent);
   margin: 0;
 }
 
@@ -96,27 +111,35 @@
 
 .pill:hover { filter: brightness(1.12); }
 .pill:active { transform: translateY(1px); }
-.pill:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 3px; }
+.pill:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: 3px; }
 
-/* 포스터 그린은 CTA에만 씁니다. 페이지에서 가장 밝은 면입니다. */
+/* CTA 는 그린이 가장 강하게 채워지는 면입니다. 같은 그린이 페이지의
+   다른 요소에도 이어지므로, 버튼은 색의 시작이 아니라 정점입니다.
+   단색 면 하나 — 그라디언트를 쓰지 않습니다(규칙 2). */
 .pill-primary {
-  background: var(--ds-poster-gradient);
+  background: var(--ds-accent-fill);
   color: var(--ds-on-primary);
   padding: 11px 22px;
 }
 
 .pill-tertiary {
   background: transparent;
-  color: var(--ds-syntax-link);
-  border: 1px solid var(--ds-hairline);
+  color: var(--ds-accent-strong);
+  border: 1px solid var(--ds-accent-line);
   padding: 11px 18px;
 }
 
-.pill-tertiary:hover { border-color: var(--ds-syntax-link); }
+/* 호버에서 옅은 틴트를 깔지 않고 같은 원색 그린 면으로 채웁니다. */
+.pill-tertiary:hover {
+  background: var(--ds-accent-fill);
+  border-color: var(--ds-accent-fill);
+  color: var(--ds-on-primary);
+}
 
-/* 마감·모집처럼 강한 알림에만. 페이지당 1회. */
+/* 마감·모집처럼 의미가 있는 알림에만. 페이지에서 유일한 비그린이라
+   페이지당 1회를 넘기지 않습니다. */
 .pill-alert {
-  background: var(--ds-syntax-error);
+  background: var(--ds-alert);
   color: var(--ds-inverse-ink);
   padding: 10px 18px;
   min-height: 40px;
@@ -125,8 +148,22 @@
 
 /* --- 섹션 리듬 ----------------------------------------- */
 /* 인접 섹션의 위·아래 패딩이 합쳐져 리듬 상수 96px 이 됩니다. */
-.section { padding-block: calc(var(--ds-space-section) / 2); }
+.section { position: relative; padding-block: calc(var(--ds-space-section) / 2); }
 .section > .eyebrow { margin-bottom: var(--ds-space-lg); }
+
+/* 규칙 3 — 내용이 바뀌는 지점의 구분선.
+   섹션이 바뀔 때마다 원색 그린 1px 이 화면을 가로지릅니다. 여백만으로
+   나누지 않고 선을 그어 전환을 눈에 보이게 합니다. 히어로와 첫 섹션
+   사이는 마퀴 스트립이 같은 역할을 하므로 선을 겹치지 않습니다. */
+.section + .section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: 1px;
+  background: var(--ds-accent-line);
+}
 
 /* 해시 딥링크(/#apply, /about#program)로 들어왔을 때 sticky nav(56px)가
    섹션 머리를 덮지 않도록 여백을 둡니다. */
@@ -161,11 +198,11 @@
 
 .rail b { writing-mode: vertical-rl; font-weight: 400; }
 
+/* 줄무늬(repeating-linear-gradient) 대신 단색 세로선 하나입니다. */
 .rail i {
-  width: 7px;
+  width: 2px;
   height: 140px;
-  background: repeating-linear-gradient(180deg, var(--ds-ink-soft) 0 3px, transparent 3px 9px);
-  opacity: 0.7;
+  background: var(--ds-accent-fill);
 }
 
 @media (min-width: 1520px) {
@@ -177,7 +214,7 @@
 /* --- 히어로 ------------------------------------------- */
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
   gap: var(--ds-space-xxl);
   align-items: center;
   padding-block: var(--ds-space-xxl) var(--ds-space-section);
@@ -190,6 +227,10 @@
 .hero-title { padding-left: 52px; }
 .hero-line { display: block; position: relative; }
 
+/* 헤드라인의 마지막 줄 전체를 그린으로 넘깁니다. 문장이 검정에서
+   그린으로 바뀌며 끝나고, 그 색이 아래 섹션 제목으로 이어집니다. */
+.hero-line:last-child { color: var(--ds-accent); }
+
 .hero-line .ln {
   position: absolute;
   left: -52px;
@@ -201,16 +242,25 @@
   color: var(--ds-gutter);
 }
 
-.tok-string { font-style: normal; color: var(--ds-syntax-string); }
+/* 강조어는 에디터에서 한 구절을 드래그해 둔 것처럼 보입니다.
+   드래그 선택(::selection)과 같은 그린 틴트를 써서, 페이지의 강조가
+   전부 '같은 손짓'으로 읽히게 하는 것이 이 페이지의 서명입니다.
+   히어로에서 한 번만 쓰고, 다른 곳에서는 반복하지 않습니다. */
+.tok-hl {
+  font-style: normal;
+  color: var(--ds-on-primary);
+  background: var(--ds-accent-tint);
+  border-radius: var(--ds-radius-xs);
+  padding-inline: 0.08em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
 
-/* 마지막 세미콜론만 포스터 그라디언트로 칠합니다.
-   흰 배경 위 글자라 라임 대신 진한 그린 그라디언트를 씁니다. */
+/* 마지막 세미콜론은 동아리 이름 그 자체라 단독으로 칠합니다.
+   글자 그라디언트를 쓰지 않고 원색 그린 단색입니다(규칙 2). */
 .tok-semi {
   font-style: normal;
-  background: var(--ds-poster-gradient-ink);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ds-accent-fill);
 }
 
 .cta-row {
@@ -227,12 +277,12 @@
   gap: var(--ds-space-xl);
   margin: var(--ds-space-xxl) 0 0;
   padding-top: var(--ds-space-lg);
-  border-top: 1px solid var(--ds-hairline-soft);
+  border-top: 1px solid var(--ds-accent-line);
   font-family: var(--font-mono);
 }
 
-.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-syntax-comment); }
-.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-syntax-prop); }
+.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-accent); }
+.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-accent-strong); }
 
 /* 포스터 패널: 페이지에서 유일한 대형 컬러 면입니다. */
 .hero-poster {
@@ -242,24 +292,21 @@
   justify-content: center;
   aspect-ratio: 3 / 4;
   border-radius: var(--ds-radius-md);
-  background: var(--ds-poster-gradient);
+  background: var(--ds-accent-fill);
   overflow: hidden;
 }
 
-/* 포스터의 바코드 마커. */
-.hero-poster::before,
+/* 캡션 영역을 가르는 선. 포스터 안에서도 글자 성격이 바뀌는 지점은
+   선으로 나눕니다(규칙 3). 바코드 줄무늬는 규칙 2에 따라 뺐습니다. */
 .hero-poster::after {
   content: '';
   position: absolute;
-  top: var(--ds-space-lg);
-  bottom: var(--ds-space-lg);
-  width: 8px;
-  background: repeating-linear-gradient(180deg, var(--ds-on-primary) 0 4px, transparent 4px 11px);
-  opacity: 0.55;
+  left: var(--ds-space-lg);
+  right: var(--ds-space-lg);
+  bottom: calc(var(--ds-space-lg) * 2 + 28px);
+  height: 1px;
+  background: var(--ds-on-primary);
 }
-
-.hero-poster::before { left: var(--ds-space-md); }
-.hero-poster::after { right: var(--ds-space-md); }
 
 .poster-glyph {
   font-family: var(--font-display);
@@ -288,8 +335,9 @@
 .marquee {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  height: 34px;
-  background: var(--ds-poster-gradient);
+  /* 얇은 띠가 아니라 화면을 가로지르는 큰 그린 면입니다. */
+  height: clamp(56px, 6vw, 76px);
+  background: var(--ds-accent-fill);
   color: var(--ds-on-primary);
   display: flex;
   align-items: center;
@@ -301,10 +349,10 @@
 .marquee-group i {
   font-family: var(--font-mono);
   font-style: normal;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  padding-inline: var(--ds-space-lg);
+  font-size: clamp(15px, 1.6vw, 22px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding-inline: var(--ds-space-xl);
 }
 .marquee-group i::after { content: ' ;'; }
 
@@ -314,35 +362,43 @@
 }
 
 /* --- 컬러블록 ----------------------------------------- */
-/* 파스텔 면 대신, 중립 면 + 왼쪽 구문색 액센트 바입니다.
-   블록끼리의 구분은 채워진 색이 아니라 액센트 색이 만듭니다. */
+/* 틴트 면을 쓰지 않습니다(규칙 1). 흰 면 + 중성 헤어라인 테두리 +
+   왼쪽 원색 그린 액센트 바이고, 블록끼리의 구분은 배경색이 아니라
+   액센트 바의 깊이(fill → accent → strong)가 만듭니다. */
 .block {
   border: 1px solid var(--ds-hairline);
-  border-left: 3px solid var(--ds-syntax-type);
+  border-left: 3px solid var(--ds-accent-fill);
   border-radius: var(--ds-radius-md);
   padding: var(--ds-space-xxl);
-  background: var(--ds-block-lime);
+  background: var(--ds-surface);
   color: var(--ds-ink);
+}
+
+/* 라벨과 본문은 성격이 다른 내용이라 선으로 나눕니다(규칙 3). */
+.block > .eyebrow {
+  padding-bottom: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-hairline);
 }
 
 .block .eyebrow { margin-bottom: var(--ds-space-lg); }
 .block h2 + .subhead { margin-top: var(--ds-space-lg); max-width: 62ch; }
 
-.block-lilac { background: var(--ds-block-lilac); border-left-color: var(--ds-syntax-control); }
-.block-coral { background: var(--ds-block-coral); border-left-color: var(--ds-syntax-error); }
-.block-lime { background: var(--ds-block-lime); border-left-color: var(--ds-syntax-comment); }
-.block-mint { background: var(--ds-block-mint); border-left-color: var(--ds-syntax-type); }
-/* 페이지에서 유일한 반전 면입니다. 같은 화면이 다크 테마로 넘어간 것처럼
-   보이도록, 이 안에서만 구문색을 다크 팔레트로 바꿔 씁니다. */
+.block-lilac { border-left-color: var(--ds-accent-strong); }
+.block-coral { border-left-color: var(--ds-accent-fill); }
+.block-lime { border-left-color: var(--ds-accent); }
+.block-mint { border-left-color: var(--ds-accent-fill); }
+/* 페이지에서 유일한 반전 면입니다. 선으로만 구분되던 흰 페이지가
+   여기서 한 번 뒤집히고, 강조어만 포스터 라임으로 켜집니다. */
 .block-navy {
   background: var(--ds-block-navy);
   color: var(--ds-inverse-ink);
   border-color: var(--ds-block-navy);
-  border-left-color: var(--ds-syntax-keyword-dark);
+  border-left-color: var(--ds-accent-bright);
 }
 
-.block-navy .eyebrow { color: var(--ds-syntax-comment-dark); }
-.block-navy .subhead { color: #b4b8bd; }
+.block-navy > .eyebrow { border-bottom-color: var(--ds-accent-bright); }
+.block-navy .eyebrow { color: var(--ds-accent-bright); }
+.block-navy .subhead { color: var(--ds-inverse-ink-soft); }
 
 .quote-block { padding-block: calc(var(--ds-space-section) - var(--ds-space-lg)); }
 /* ch 은 '0' 글자 폭 기준이라 한글에서는 예상보다 좁습니다.
@@ -351,8 +407,8 @@
 .quote-line { display: block; }
 /* inline-block 은 안쪽 끝 공백이 잘리므로 어절 간격을 margin 으로 줍니다. */
 .quote-word { display: inline-block; margin-inline-end: 0.26em; }
-.quote-word.strong { font-weight: 700; color: var(--ds-syntax-type); }
-.block-navy .quote-word.strong { color: var(--ds-syntax-type-dark); }
+.quote-word.strong { font-weight: 700; color: var(--ds-accent-strong); }
+.block-navy .quote-word.strong { color: var(--ds-accent-bright); }
 
 /* --- 01 ABOUT ----------------------------------------- */
 .value-grid {
@@ -420,7 +476,7 @@
   padding: 0;
 }
 
-.steps .eyebrow { display: block; color: var(--ds-syntax-number); }
+.steps .eyebrow { display: block; color: var(--ds-accent); }
 .steps .eyebrow::before { content: none; }
 .steps b { display: block; margin-block: var(--ds-space-xl) var(--ds-space-sm); font-size: 22px; font-weight: 600; line-height: 1.45; }
 .steps p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; color: var(--ds-ink-soft); }
@@ -442,7 +498,32 @@
 
 .promo-banner p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; }
 
-.apply-block .pill-primary { margin-top: var(--ds-space-xl); }
+/* 지원 섹션은 페이지에서 가장 큰 그린 면입니다. 선으로만 나뉘던
+   흰 페이지가 여기서 통째로 색으로 뒤집히고, 그 면이 곧 CTA 입니다. */
+.apply-block {
+  background: var(--ds-accent-fill);
+  color: var(--ds-on-primary);
+  border-color: var(--ds-accent-fill);
+  border-left-color: var(--ds-green-950);
+  padding-block: var(--ds-space-section);
+}
+
+.apply-block .eyebrow,
+.apply-block h2,
+.apply-block .subhead,
+.apply-block small { color: var(--ds-on-primary); }
+
+.apply-block > .eyebrow { border-bottom-color: var(--ds-on-primary); }
+
+/* 그린 면 위에서는 버튼이 반대로 딥 파인 면이 됩니다. */
+.apply-block .pill-primary {
+  margin-top: var(--ds-space-xl);
+  background: var(--ds-green-950);
+  color: var(--ds-inverse-ink);
+}
+
+.apply-block .pill-primary:focus-visible { outline-color: var(--ds-green-950); }
+
 .apply-block small {
   display: block;
   margin-top: var(--ds-space-sm);
@@ -450,11 +531,11 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ds-ink-soft);
 }
 
 /* --- 05 FAQ ------------------------------------------- */
 .faq-block h2 { margin-bottom: var(--ds-space-xl); }
+/* 질문 하나하나가 다른 내용이라 항목마다 선을 둡니다(규칙 3). */
 .faq-item { border-top: 1px solid var(--ds-hairline); }
 .faq-item:last-child { border-bottom: 1px solid var(--ds-hairline); }
 
@@ -473,9 +554,9 @@
   line-height: 1.4;
 }
 
-.faq-item button:hover { color: var(--ds-syntax-prop); }
-.faq-item button:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 2px; }
-.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-syntax-type); }
+.faq-item button:hover { color: var(--ds-accent-strong); }
+.faq-item button:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: 2px; }
+.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-accent); }
 .faq-item p {
   margin: 0;
   padding-bottom: var(--ds-space-lg);
