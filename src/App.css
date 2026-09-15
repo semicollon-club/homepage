@@ -1,6 +1,32 @@
-/* 2026 리디자인 프로토타입 — 흰 캔버스 + 코드 에디터 라이트 테마 구문색.
-   배경은 기존과 같은 흰색을 유지하고, 파스텔 컬러블록만 걷어냅니다
-   (docs/DESIGN.md 갱신 예정).
+/* 2026 리디자인 — 흰 캔버스 + 모집 포스터 그린 한 색.
+   배경은 기존과 같은 흰색을 유지합니다. 그린은 버튼 전용이 아니라
+   라벨·줄 번호·강조어·구분선·블록 액센트·반전 패널까지 페이지 전체를
+   관통하는 포인트 색입니다 (docs/DESIGN.md 갱신 예정).
+
+   디자인 규칙(index.css 상단 참조)을 이 파일에도 그대로 적용합니다.
+   1. 파스텔 틴트 면 없음 — 면은 흰색·원색 그린·딥 네이비 셋뿐입니다.
+   2. 그라디언트 없음 — 채워진 면은 전부 단색입니다.
+   3. 섹션이 바뀔 때마다 풀블리드 그린 1px 구분선을 둡니다.
+   4. 폰트는 IBM Plex Sans KR / IBM Plex Mono 두 역할뿐입니다.
+   5. 포인트 색 셋의 역할이 갈립니다.
+      그린 = 정체성(면·제목), 레드(--ds-alert) = 지금 걸려 있는 것,
+      블루(--ds-info) = 구조와 안내(번호·라벨·기호·반전 면).
+      레드는 선·글자에만 쓰고, 면을 채우는 것은 작은 알림 버튼
+      (.pill-alert) 하나뿐입니다.
+   6. 글줄 안의 강조는 글자색으로만 합니다 — 강조어 뒤에 면을 깔거나
+      밑줄·마커를 달지 않습니다(.tok-hl, .tok-alert).
+   7. 배치 비율 그린:레드:블루 = 40:30:30. 면적이 아니라 '색이 쓰인
+      자리' 수 기준이고, 이 페이지의 20자리를 8:6:6 으로 나눕니다.
+
+   포인트 색 자리 목록 (규칙 7) ----------------------------
+   그린 8 — 마퀴 면 / 히어로 포스터 면 / 지원 블록 면 / CTA 버튼 면 /
+            섹션 구분선 / 섹션 제목 h2 / 히어로 헤드라인(마지막 줄·
+            .tok-hl·.tok-semi) / 반전 면 위 강조어(라임)
+   레드 6 — 히어로 '모집' 한 줄 / JOIN US .tok-alert / 모집 배너 왼쪽 바 /
+            '모집 중' 상태 라벨 / APPLY 위 구분선 한 줄 / .pill-alert 면
+   블루 6 — 인용 반전 면 / 섹션 번호 .eyebrow / 줄 번호·데이터 라벨 /
+            STEP 01–03 라벨 / FAQ 왼쪽 바·펼침 기호 / 보조 링크 버튼
+   자리를 새로 늘리지 말고, 넣을 때는 같은 색 자리 하나를 빼세요.
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
    공통 nav/footer는 layouts/Layout.css 참조.
 
@@ -33,13 +59,20 @@
   margin: 0;
 }
 
+/* 섹션 제목은 검정이 아니라 포인트 그린입니다. 페이지에서 가장 큰
+   글자가 곧 가장 큰 색 면이 되도록, 색을 버튼이 아니라 제목에 씁니다.
+   흰 배경 위 대비 5.1:1 로 본문 크기에서도 안전한 단계입니다. */
 .ds-page h2 {
   font-size: clamp(30px, 3.8vw, 52px);
   font-weight: 600;
   line-height: 1.18;
   letter-spacing: -0.025em;
   margin: 0;
+  color: var(--ds-accent);
 }
+
+/* 반전 패널·그린 면 위에서는 제목이 면 색을 그대로 받습니다. */
+.block-navy h2 { color: var(--ds-inverse-ink); }
 
 .ds-page h3 {
   font-size: 22px;
@@ -48,7 +81,10 @@
   margin: 0;
 }
 
-/* 섹션 라벨은 코드 주석처럼 읽힙니다. */
+/* 섹션 라벨은 코드 주석처럼 읽힙니다. 이건 내용이 아니라 '지금 몇 번째
+   섹션인지'를 알려주는 표지라 그린이 아니라 안내 블루입니다(규칙 5).
+   줄 번호·단계 라벨·펼침 기호와 같은 색이라, 스크롤하는 동안 블루만
+   따라가도 페이지 구조가 읽힙니다. */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -56,7 +92,7 @@
   line-height: 1.3;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ds-syntax-comment);
+  color: var(--ds-info);
   margin: 0;
 }
 
@@ -79,6 +115,23 @@
   margin: 0;
 }
 
+/* 중요한 대목을 짚는 레드 강조. 밑줄도 면도 없이 글자만 칠합니다 —
+   그린 강조(.tok-hl)가 '우리가 하고 싶은 말'이라면 이쪽은 '놓치면
+   곤란한 말'이고, 둘의 차이는 색 하나로만 납니다. 한 섹션에 한 번까지. */
+.tok-alert {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ds-alert-strong);
+}
+
+/* 그린 면·반전 면 위에서는 레드가 읽히지 않습니다. 그런 면 안에서는
+   글자색을 면에 맡기고 굵기로만 강조합니다. */
+.apply-block .tok-alert,
+.block-navy .tok-alert {
+  color: inherit;
+  font-weight: 700;
+}
+
 /* --- 버튼 --------------------------------------------- */
 .pill {
   display: inline-flex;
@@ -96,37 +149,71 @@
 
 .pill:hover { filter: brightness(1.12); }
 .pill:active { transform: translateY(1px); }
-.pill:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 3px; }
+.pill:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: 3px; }
 
-/* 포스터 그린은 CTA에만 씁니다. 페이지에서 가장 밝은 면입니다. */
+/* CTA 는 그린이 가장 강하게 채워지는 면입니다. 같은 그린이 페이지의
+   다른 요소에도 이어지므로, 버튼은 색의 시작이 아니라 정점입니다.
+   단색 면 하나 — 그라디언트를 쓰지 않습니다(규칙 2). */
 .pill-primary {
-  background: var(--ds-poster-gradient);
+  background: var(--ds-accent-fill);
   color: var(--ds-on-primary);
   padding: 11px 22px;
 }
 
+/* 보조 링크는 '다른 데로 안내하는' 버튼이라 안내 블루입니다.
+   그린 CTA 와 같은 자리에 나란히 서도 어느 쪽이 주행동인지 색으로
+   갈립니다 — 채워진 그린이 주, 선만 있는 블루가 보조입니다. */
 .pill-tertiary {
   background: transparent;
-  color: var(--ds-syntax-link);
-  border: 1px solid var(--ds-hairline);
+  color: var(--ds-info-strong);
+  border: 1px solid var(--ds-info-line);
   padding: 11px 18px;
 }
 
-.pill-tertiary:hover { border-color: var(--ds-syntax-link); }
+/* 호버에서 옅은 틴트를 깔지 않고 반전 면(딥 네이비)으로 채웁니다. */
+.pill-tertiary:hover {
+  background: var(--ds-info-surface);
+  border-color: var(--ds-info-surface);
+  color: var(--ds-inverse-ink);
+}
 
-/* 마감·모집처럼 강한 알림에만. 페이지당 1회. */
+.pill-tertiary:focus-visible { outline-color: var(--ds-info); }
+
+/* 레드가 면으로 채워지는 유일한 예외입니다. 지금 열려 있는 모집처럼
+   기한이 걸린 행동에만 쓰고, 페이지당 1회를 넘기지 않습니다. */
 .pill-alert {
-  background: var(--ds-syntax-error);
+  background: var(--ds-alert);
   color: var(--ds-inverse-ink);
   padding: 10px 18px;
   min-height: 40px;
   font-size: 15px;
 }
 
+.pill-alert:focus-visible { outline-color: var(--ds-alert-strong); }
+
 /* --- 섹션 리듬 ----------------------------------------- */
 /* 인접 섹션의 위·아래 패딩이 합쳐져 리듬 상수 96px 이 됩니다. */
-.section { padding-block: calc(var(--ds-space-section) / 2); }
+.section { position: relative; padding-block: calc(var(--ds-space-section) / 2); }
 .section > .eyebrow { margin-bottom: var(--ds-space-lg); }
+
+/* 규칙 3 — 내용이 바뀌는 지점의 구분선.
+   섹션이 바뀔 때마다 원색 그린 1px 이 화면을 가로지릅니다. 여백만으로
+   나누지 않고 선을 그어 전환을 눈에 보이게 합니다. 히어로와 첫 섹션
+   사이는 마퀴 스트립이 같은 역할을 하므로 선을 겹치지 않습니다. */
+.section + .section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: 1px;
+  background: var(--ds-accent-line);
+}
+
+/* 섹션 경계는 전부 그린 1px 이지만, 페이지가 '이야기'에서 '요청'으로
+   넘어가는 이 한 줄만 레드입니다. 선의 색이 바뀌는 곳이 곧 성격이
+   바뀌는 곳 — 규칙 3의 연장입니다. 페이지당 한 번만 씁니다. */
+.section + .section-alert::before { background: var(--ds-alert-line); }
 
 /* 해시 딥링크(/#apply, /about#program)로 들어왔을 때 sticky nav(56px)가
    섹션 머리를 덮지 않도록 여백을 둡니다. */
@@ -161,11 +248,11 @@
 
 .rail b { writing-mode: vertical-rl; font-weight: 400; }
 
+/* 줄무늬(repeating-linear-gradient) 대신 단색 세로선 하나입니다. */
 .rail i {
-  width: 7px;
+  width: 2px;
   height: 140px;
-  background: repeating-linear-gradient(180deg, var(--ds-ink-soft) 0 3px, transparent 3px 9px);
-  opacity: 0.7;
+  background: var(--ds-accent-fill);
 }
 
 @media (min-width: 1520px) {
@@ -177,7 +264,7 @@
 /* --- 히어로 ------------------------------------------- */
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
   gap: var(--ds-space-xxl);
   align-items: center;
   padding-block: var(--ds-space-xxl) var(--ds-space-section);
@@ -190,6 +277,10 @@
 .hero-title { padding-left: 52px; }
 .hero-line { display: block; position: relative; }
 
+/* 헤드라인의 마지막 줄 전체를 그린으로 넘깁니다. 문장이 검정에서
+   그린으로 바뀌며 끝나고, 그 색이 아래 섹션 제목으로 이어집니다. */
+.hero-line:last-child { color: var(--ds-accent); }
+
 .hero-line .ln {
   position: absolute;
   left: -52px;
@@ -198,19 +289,23 @@
   font-size: 13px;
   font-style: normal;
   letter-spacing: 0.05em;
-  color: var(--ds-gutter);
+  color: var(--ds-info);
 }
 
-.tok-string { font-style: normal; color: var(--ds-syntax-string); }
+/* 강조어는 글자 자체를 칠합니다. 뒤에 면을 깔면 그 구절만 다른 재질의
+   조각처럼 떠서 문장이 끊기는데, 글자만 칠하면 한 문장 안에서 한 단어의
+   목소리만 커집니다(규칙 6). 히어로에서 한 번만 씁니다. */
+.tok-hl {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ds-accent);
+}
 
-/* 마지막 세미콜론만 포스터 그라디언트로 칠합니다.
-   흰 배경 위 글자라 라임 대신 진한 그린 그라디언트를 씁니다. */
+/* 마지막 세미콜론은 동아리 이름 그 자체라 단독으로 칠합니다.
+   글자 그라디언트를 쓰지 않고 원색 그린 단색입니다(규칙 2). */
 .tok-semi {
   font-style: normal;
-  background: var(--ds-poster-gradient-ink);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ds-accent-fill);
 }
 
 .cta-row {
@@ -227,12 +322,20 @@
   gap: var(--ds-space-xl);
   margin: var(--ds-space-xxl) 0 0;
   padding-top: var(--ds-space-lg);
-  border-top: 1px solid var(--ds-hairline-soft);
+  border-top: 1px solid var(--ds-accent-line);
   font-family: var(--font-mono);
 }
 
-.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-syntax-comment); }
-.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-syntax-prop); }
+/* 라벨은 안내 블루, 값은 검정입니다. 포스터 하단 정보 라인이라
+   라벨 쪽은 줄 번호·섹션 번호와 같은 표지 색을 씁니다. */
+.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-info); }
+.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-ink); }
+
+/* 세 사실 중 지금 상태가 걸려 있는 항목 하나만 레드입니다. 마커도
+   바도 달지 않고 라벨과 값의 글자색만 바꿉니다 — 나머지 두 줄에서
+   값이 검정인 자리에서 색이 갈리는 것만으로 충분히 눈에 걸립니다. */
+.hero-facts .is-alert dt { color: var(--ds-alert); }
+.hero-facts .is-alert dd { color: var(--ds-alert-strong); }
 
 /* 포스터 패널: 페이지에서 유일한 대형 컬러 면입니다. */
 .hero-poster {
@@ -242,24 +345,21 @@
   justify-content: center;
   aspect-ratio: 3 / 4;
   border-radius: var(--ds-radius-md);
-  background: var(--ds-poster-gradient);
+  background: var(--ds-accent-fill);
   overflow: hidden;
 }
 
-/* 포스터의 바코드 마커. */
-.hero-poster::before,
+/* 캡션 영역을 가르는 선. 포스터 안에서도 글자 성격이 바뀌는 지점은
+   선으로 나눕니다(규칙 3). 바코드 줄무늬는 규칙 2에 따라 뺐습니다. */
 .hero-poster::after {
   content: '';
   position: absolute;
-  top: var(--ds-space-lg);
-  bottom: var(--ds-space-lg);
-  width: 8px;
-  background: repeating-linear-gradient(180deg, var(--ds-on-primary) 0 4px, transparent 4px 11px);
-  opacity: 0.55;
+  left: var(--ds-space-lg);
+  right: var(--ds-space-lg);
+  bottom: calc(var(--ds-space-lg) * 2 + 28px);
+  height: 1px;
+  background: var(--ds-on-primary);
 }
-
-.hero-poster::before { left: var(--ds-space-md); }
-.hero-poster::after { right: var(--ds-space-md); }
 
 .poster-glyph {
   font-family: var(--font-display);
@@ -288,8 +388,9 @@
 .marquee {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  height: 34px;
-  background: var(--ds-poster-gradient);
+  /* 얇은 띠가 아니라 화면을 가로지르는 큰 그린 면입니다. */
+  height: clamp(56px, 6vw, 76px);
+  background: var(--ds-accent-fill);
   color: var(--ds-on-primary);
   display: flex;
   align-items: center;
@@ -301,10 +402,10 @@
 .marquee-group i {
   font-family: var(--font-mono);
   font-style: normal;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  padding-inline: var(--ds-space-lg);
+  font-size: clamp(15px, 1.6vw, 22px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding-inline: var(--ds-space-xl);
 }
 .marquee-group i::after { content: ' ;'; }
 
@@ -314,35 +415,45 @@
 }
 
 /* --- 컬러블록 ----------------------------------------- */
-/* 파스텔 면 대신, 중립 면 + 왼쪽 구문색 액센트 바입니다.
-   블록끼리의 구분은 채워진 색이 아니라 액센트 색이 만듭니다. */
+/* 틴트 면을 쓰지 않습니다(규칙 1). 흰 면 + 중성 헤어라인 테두리 +
+   왼쪽 원색 그린 액센트 바이고, 블록끼리의 구분은 배경색이 아니라
+   액센트 바의 깊이(fill → accent → strong)가 만듭니다. */
 .block {
   border: 1px solid var(--ds-hairline);
-  border-left: 3px solid var(--ds-syntax-type);
+  border-left: 3px solid var(--ds-accent-fill);
   border-radius: var(--ds-radius-md);
   padding: var(--ds-space-xxl);
-  background: var(--ds-block-lime);
+  background: var(--ds-surface);
   color: var(--ds-ink);
+}
+
+/* 라벨과 본문은 성격이 다른 내용이라 선으로 나눕니다(규칙 3). */
+.block > .eyebrow {
+  padding-bottom: var(--ds-space-lg);
+  border-bottom: 1px solid var(--ds-hairline);
 }
 
 .block .eyebrow { margin-bottom: var(--ds-space-lg); }
 .block h2 + .subhead { margin-top: var(--ds-space-lg); max-width: 62ch; }
 
-.block-lilac { background: var(--ds-block-lilac); border-left-color: var(--ds-syntax-control); }
-.block-coral { background: var(--ds-block-coral); border-left-color: var(--ds-syntax-error); }
-.block-lime { background: var(--ds-block-lime); border-left-color: var(--ds-syntax-comment); }
-.block-mint { background: var(--ds-block-mint); border-left-color: var(--ds-syntax-type); }
-/* 페이지에서 유일한 반전 면입니다. 같은 화면이 다크 테마로 넘어간 것처럼
-   보이도록, 이 안에서만 구문색을 다크 팔레트로 바꿔 씁니다. */
+.block-lilac { border-left-color: var(--ds-accent-strong); }
+.block-coral { border-left-color: var(--ds-accent-fill); }
+/* FAQ 블록은 본문이 아니라 찾아 읽는 참고 자료라 왼쪽 바가 블루입니다. */
+.block-lime { border-left-color: var(--ds-info-line); }
+.block-mint { border-left-color: var(--ds-accent-fill); }
+/* 반전 면(딥 네이비). 선으로만 구분되던 흰 페이지가 여기서 한 번
+   뒤집힙니다. 블루가 면을 갖는 유일한 자리이고, 그 위에서 라벨·강조어는
+   포스터 라임으로 켜집니다 — 블루 면 위에 그린이 올라가는 구조입니다. */
 .block-navy {
   background: var(--ds-block-navy);
   color: var(--ds-inverse-ink);
   border-color: var(--ds-block-navy);
-  border-left-color: var(--ds-syntax-keyword-dark);
+  border-left-color: var(--ds-accent-bright);
 }
 
-.block-navy .eyebrow { color: var(--ds-syntax-comment-dark); }
-.block-navy .subhead { color: #b4b8bd; }
+.block-navy > .eyebrow { border-bottom-color: var(--ds-accent-bright); }
+.block-navy .eyebrow { color: var(--ds-accent-bright); }
+.block-navy .subhead { color: var(--ds-inverse-ink-soft); }
 
 .quote-block { padding-block: calc(var(--ds-space-section) - var(--ds-space-lg)); }
 /* ch 은 '0' 글자 폭 기준이라 한글에서는 예상보다 좁습니다.
@@ -351,8 +462,8 @@
 .quote-line { display: block; }
 /* inline-block 은 안쪽 끝 공백이 잘리므로 어절 간격을 margin 으로 줍니다. */
 .quote-word { display: inline-block; margin-inline-end: 0.26em; }
-.quote-word.strong { font-weight: 700; color: var(--ds-syntax-type); }
-.block-navy .quote-word.strong { color: var(--ds-syntax-type-dark); }
+.quote-word.strong { font-weight: 700; color: var(--ds-accent-strong); }
+.block-navy .quote-word.strong { color: var(--ds-accent-bright); }
 
 /* --- 01 ABOUT ----------------------------------------- */
 .value-grid {
@@ -420,12 +531,15 @@
   padding: 0;
 }
 
-.steps .eyebrow { display: block; color: var(--ds-syntax-number); }
+/* STEP 01–03 은 순서 그 자체라 안내 블루를 씁니다. */
+.steps .eyebrow { display: block; color: var(--ds-info); }
 .steps .eyebrow::before { content: none; }
 .steps b { display: block; margin-block: var(--ds-space-xl) var(--ds-space-sm); font-size: 22px; font-weight: 600; line-height: 1.45; }
 .steps p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; color: var(--ds-ink-soft); }
 
 /* --- 04 APPLY ----------------------------------------- */
+/* 지금 열려 있는 모집을 알리는 줄. 페이지에서 유일하게 '기한'이 걸린
+   내용이라 왼쪽 바를 그린이 아니라 레드로 답니다. */
 .promo-banner {
   display: flex;
   align-items: center;
@@ -435,6 +549,7 @@
   background: var(--ds-surface);
   color: var(--ds-ink);
   border: 1px solid var(--ds-hairline);
+  border-left: 3px solid var(--ds-alert-line);
   border-radius: var(--ds-radius-sm);
   padding: var(--ds-space-md) var(--ds-space-lg);
   margin-bottom: var(--ds-space-xl);
@@ -442,7 +557,47 @@
 
 .promo-banner p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; }
 
-.apply-block .pill-primary { margin-top: var(--ds-space-xl); }
+/* 상태 라벨. 안내 문장과 성격이 달라 사이를 선으로 끊습니다(규칙 3). */
+.promo-banner .promo-flag {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--ds-alert);
+  padding-right: var(--ds-space-lg);
+  border-right: 1px solid var(--ds-hairline);
+}
+
+.promo-flag + p { flex: 1 1 260px; }
+
+/* 지원 섹션은 페이지에서 가장 큰 그린 면입니다. 선으로만 나뉘던
+   흰 페이지가 여기서 통째로 색으로 뒤집히고, 그 면이 곧 CTA 입니다. */
+.apply-block {
+  background: var(--ds-accent-fill);
+  color: var(--ds-on-primary);
+  border-color: var(--ds-accent-fill);
+  border-left-color: var(--ds-info-surface);
+  padding-block: var(--ds-space-section);
+}
+
+.apply-block .eyebrow,
+.apply-block h2,
+.apply-block .subhead,
+.apply-block small { color: var(--ds-on-primary); }
+
+.apply-block > .eyebrow { border-bottom-color: var(--ds-on-primary); }
+
+/* 그린 면 위에서는 버튼이 반대로 반전 면(딥 네이비)이 됩니다.
+   페이지의 반전 면은 인용 패널과 이 버튼 둘뿐이고 둘 다 같은 색입니다. */
+.apply-block .pill-primary {
+  margin-top: var(--ds-space-xl);
+  background: var(--ds-info-surface);
+  color: var(--ds-inverse-ink);
+}
+
+.apply-block .pill-primary:focus-visible { outline-color: var(--ds-info-surface); }
+
 .apply-block small {
   display: block;
   margin-top: var(--ds-space-sm);
@@ -450,11 +605,11 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ds-ink-soft);
 }
 
 /* --- 05 FAQ ------------------------------------------- */
 .faq-block h2 { margin-bottom: var(--ds-space-xl); }
+/* 질문 하나하나가 다른 내용이라 항목마다 선을 둡니다(규칙 3). */
 .faq-item { border-top: 1px solid var(--ds-hairline); }
 .faq-item:last-child { border-bottom: 1px solid var(--ds-hairline); }
 
@@ -473,9 +628,10 @@
   line-height: 1.4;
 }
 
-.faq-item button:hover { color: var(--ds-syntax-prop); }
-.faq-item button:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 2px; }
-.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-syntax-type); }
+/* 펼침 기호(+ / −)는 내용이 아니라 조작 표지라 안내 블루입니다. */
+.faq-item button:hover { color: var(--ds-info-strong); }
+.faq-item button:focus-visible { outline: 2px solid var(--ds-info); outline-offset: 2px; }
+.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-info); }
 .faq-item p {
   margin: 0;
   padding-bottom: var(--ds-space-lg);
@@ -520,7 +676,14 @@
   .cta-row { flex-direction: column; align-items: stretch; }
   .cta-row .pill { width: 100%; }
   .hero-facts { gap: var(--ds-space-lg); }
-  .promo-banner { flex-direction: column; align-items: flex-start; }
+  .promo-banner { flex-direction: column; align-items: flex-start; gap: var(--ds-space-sm); }
+  /* 세로로 쌓이면 오른쪽 선이 아무것도 나누지 못하므로 아래로 옮깁니다. */
+  .promo-banner .promo-flag {
+    align-self: stretch;
+    padding: 0 0 var(--ds-space-sm);
+    border-right: 0;
+    border-bottom: 1px solid var(--ds-hairline);
+  }
   .faq-item button { font-size: 17px; }
 }
 
