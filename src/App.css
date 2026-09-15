@@ -4,15 +4,29 @@
    관통하는 포인트 색입니다 (docs/DESIGN.md 갱신 예정).
 
    디자인 규칙(index.css 상단 참조)을 이 파일에도 그대로 적용합니다.
-   1. 파스텔 틴트 면 없음 — 면은 흰색·원색 그린·딥 파인 셋뿐입니다.
+   1. 파스텔 틴트 면 없음 — 면은 흰색·원색 그린·딥 네이비 셋뿐입니다.
    2. 그라디언트 없음 — 채워진 면은 전부 단색입니다.
    3. 섹션이 바뀔 때마다 풀블리드 그린 1px 구분선을 둡니다.
    4. 폰트는 IBM Plex Sans KR / IBM Plex Mono 두 역할뿐입니다.
-   5. 레드(--ds-alert)는 중요한 대목을 가리키는 표시입니다. 블록을
-      가르는 왼쪽 바·구분선 한 줄에만 쓰고, 면을 채우는 것은 작은
-      알림 버튼(.pill-alert) 하나뿐입니다.
+   5. 포인트 색 셋의 역할이 갈립니다.
+      그린 = 정체성(면·제목), 레드(--ds-alert) = 지금 걸려 있는 것,
+      블루(--ds-info) = 구조와 안내(번호·라벨·기호·반전 면).
+      레드는 선·글자에만 쓰고, 면을 채우는 것은 작은 알림 버튼
+      (.pill-alert) 하나뿐입니다.
    6. 글줄 안의 강조는 글자색으로만 합니다 — 강조어 뒤에 면을 깔거나
       밑줄·마커를 달지 않습니다(.tok-hl, .tok-alert).
+   7. 배치 비율 그린:레드:블루 = 40:30:30. 면적이 아니라 '색이 쓰인
+      자리' 수 기준이고, 이 페이지의 20자리를 8:6:6 으로 나눕니다.
+
+   포인트 색 자리 목록 (규칙 7) ----------------------------
+   그린 8 — 마퀴 면 / 히어로 포스터 면 / 지원 블록 면 / CTA 버튼 면 /
+            섹션 구분선 / 섹션 제목 h2 / 히어로 헤드라인(마지막 줄·
+            .tok-hl·.tok-semi) / 반전 면 위 강조어(라임)
+   레드 6 — 히어로 '모집' 한 줄 / JOIN US .tok-alert / 모집 배너 왼쪽 바 /
+            '모집 중' 상태 라벨 / APPLY 위 구분선 한 줄 / .pill-alert 면
+   블루 6 — 인용 반전 면 / 섹션 번호 .eyebrow / 줄 번호·데이터 라벨 /
+            STEP 01–03 라벨 / FAQ 왼쪽 바·펼침 기호 / 보조 링크 버튼
+   자리를 새로 늘리지 말고, 넣을 때는 같은 색 자리 하나를 빼세요.
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
    공통 nav/footer는 layouts/Layout.css 참조.
 
@@ -67,8 +81,10 @@
   margin: 0;
 }
 
-/* 섹션 라벨은 코드 주석처럼 읽힙니다. 페이지의 모든 섹션 머리에
-   같은 그린이 반복되면서 스크롤 내내 포인트 색이 이어집니다. */
+/* 섹션 라벨은 코드 주석처럼 읽힙니다. 이건 내용이 아니라 '지금 몇 번째
+   섹션인지'를 알려주는 표지라 그린이 아니라 안내 블루입니다(규칙 5).
+   줄 번호·단계 라벨·펼침 기호와 같은 색이라, 스크롤하는 동안 블루만
+   따라가도 페이지 구조가 읽힙니다. */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -76,7 +92,7 @@
   line-height: 1.3;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ds-accent);
+  color: var(--ds-info);
   margin: 0;
 }
 
@@ -144,19 +160,24 @@
   padding: 11px 22px;
 }
 
+/* 보조 링크는 '다른 데로 안내하는' 버튼이라 안내 블루입니다.
+   그린 CTA 와 같은 자리에 나란히 서도 어느 쪽이 주행동인지 색으로
+   갈립니다 — 채워진 그린이 주, 선만 있는 블루가 보조입니다. */
 .pill-tertiary {
   background: transparent;
-  color: var(--ds-accent-strong);
-  border: 1px solid var(--ds-accent-line);
+  color: var(--ds-info-strong);
+  border: 1px solid var(--ds-info-line);
   padding: 11px 18px;
 }
 
-/* 호버에서 옅은 틴트를 깔지 않고 같은 원색 그린 면으로 채웁니다. */
+/* 호버에서 옅은 틴트를 깔지 않고 반전 면(딥 네이비)으로 채웁니다. */
 .pill-tertiary:hover {
-  background: var(--ds-accent-fill);
-  border-color: var(--ds-accent-fill);
-  color: var(--ds-on-primary);
+  background: var(--ds-info-surface);
+  border-color: var(--ds-info-surface);
+  color: var(--ds-inverse-ink);
 }
+
+.pill-tertiary:focus-visible { outline-color: var(--ds-info); }
 
 /* 레드가 면으로 채워지는 유일한 예외입니다. 지금 열려 있는 모집처럼
    기한이 걸린 행동에만 쓰고, 페이지당 1회를 넘기지 않습니다. */
@@ -268,7 +289,7 @@
   font-size: 13px;
   font-style: normal;
   letter-spacing: 0.05em;
-  color: var(--ds-gutter);
+  color: var(--ds-info);
 }
 
 /* 강조어는 글자 자체를 칠합니다. 뒤에 면을 깔면 그 구절만 다른 재질의
@@ -305,12 +326,14 @@
   font-family: var(--font-mono);
 }
 
-.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-accent); }
-.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-accent-strong); }
+/* 라벨은 안내 블루, 값은 검정입니다. 포스터 하단 정보 라인이라
+   라벨 쪽은 줄 번호·섹션 번호와 같은 표지 색을 씁니다. */
+.hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-info); }
+.hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-ink); }
 
 /* 세 사실 중 지금 상태가 걸려 있는 항목 하나만 레드입니다. 마커도
-   바도 달지 않고 라벨과 값의 글자색만 바꿉니다 — 나머지 두 줄이
-   그린인 자리에서 색이 갈리는 것만으로 충분히 눈에 걸립니다. */
+   바도 달지 않고 라벨과 값의 글자색만 바꿉니다 — 나머지 두 줄에서
+   값이 검정인 자리에서 색이 갈리는 것만으로 충분히 눈에 걸립니다. */
 .hero-facts .is-alert dt { color: var(--ds-alert); }
 .hero-facts .is-alert dd { color: var(--ds-alert-strong); }
 
@@ -415,10 +438,12 @@
 
 .block-lilac { border-left-color: var(--ds-accent-strong); }
 .block-coral { border-left-color: var(--ds-accent-fill); }
-.block-lime { border-left-color: var(--ds-accent); }
+/* FAQ 블록은 본문이 아니라 찾아 읽는 참고 자료라 왼쪽 바가 블루입니다. */
+.block-lime { border-left-color: var(--ds-info-line); }
 .block-mint { border-left-color: var(--ds-accent-fill); }
-/* 페이지에서 유일한 반전 면입니다. 선으로만 구분되던 흰 페이지가
-   여기서 한 번 뒤집히고, 강조어만 포스터 라임으로 켜집니다. */
+/* 반전 면(딥 네이비). 선으로만 구분되던 흰 페이지가 여기서 한 번
+   뒤집힙니다. 블루가 면을 갖는 유일한 자리이고, 그 위에서 라벨·강조어는
+   포스터 라임으로 켜집니다 — 블루 면 위에 그린이 올라가는 구조입니다. */
 .block-navy {
   background: var(--ds-block-navy);
   color: var(--ds-inverse-ink);
@@ -506,7 +531,8 @@
   padding: 0;
 }
 
-.steps .eyebrow { display: block; color: var(--ds-accent); }
+/* STEP 01–03 은 순서 그 자체라 안내 블루를 씁니다. */
+.steps .eyebrow { display: block; color: var(--ds-info); }
 .steps .eyebrow::before { content: none; }
 .steps b { display: block; margin-block: var(--ds-space-xl) var(--ds-space-sm); font-size: 22px; font-weight: 600; line-height: 1.45; }
 .steps p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; color: var(--ds-ink-soft); }
@@ -551,7 +577,7 @@
   background: var(--ds-accent-fill);
   color: var(--ds-on-primary);
   border-color: var(--ds-accent-fill);
-  border-left-color: var(--ds-green-950);
+  border-left-color: var(--ds-info-surface);
   padding-block: var(--ds-space-section);
 }
 
@@ -562,14 +588,15 @@
 
 .apply-block > .eyebrow { border-bottom-color: var(--ds-on-primary); }
 
-/* 그린 면 위에서는 버튼이 반대로 딥 파인 면이 됩니다. */
+/* 그린 면 위에서는 버튼이 반대로 반전 면(딥 네이비)이 됩니다.
+   페이지의 반전 면은 인용 패널과 이 버튼 둘뿐이고 둘 다 같은 색입니다. */
 .apply-block .pill-primary {
   margin-top: var(--ds-space-xl);
-  background: var(--ds-green-950);
+  background: var(--ds-info-surface);
   color: var(--ds-inverse-ink);
 }
 
-.apply-block .pill-primary:focus-visible { outline-color: var(--ds-green-950); }
+.apply-block .pill-primary:focus-visible { outline-color: var(--ds-info-surface); }
 
 .apply-block small {
   display: block;
@@ -601,9 +628,10 @@
   line-height: 1.4;
 }
 
-.faq-item button:hover { color: var(--ds-accent-strong); }
-.faq-item button:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: 2px; }
-.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-accent); }
+/* 펼침 기호(+ / −)는 내용이 아니라 조작 표지라 안내 블루입니다. */
+.faq-item button:hover { color: var(--ds-info-strong); }
+.faq-item button:focus-visible { outline: 2px solid var(--ds-info); outline-offset: 2px; }
+.faq-item button b { margin-left: auto; font-family: var(--font-mono); font-size: 22px; font-weight: 400; color: var(--ds-info); }
 .faq-item p {
   margin: 0;
   padding-bottom: var(--ds-space-lg);
