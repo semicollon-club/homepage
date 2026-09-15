@@ -8,6 +8,9 @@
    2. 그라디언트 없음 — 채워진 면은 전부 단색입니다.
    3. 섹션이 바뀔 때마다 풀블리드 그린 1px 구분선을 둡니다.
    4. 폰트는 IBM Plex Sans KR / IBM Plex Mono 두 역할뿐입니다.
+   5. 레드(--ds-alert)는 중요한 대목을 가리키는 표시입니다. 밑줄·왼쪽
+      바·거터 마커·구분선 한 줄처럼 선과 글자로만 쓰고, 면을 채우는
+      것은 작은 알림 버튼(.pill-alert) 하나뿐입니다.
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
    공통 nav/footer는 layouts/Layout.css 참조.
 
@@ -94,6 +97,29 @@
   margin: 0;
 }
 
+/* 중요한 대목을 짚는 레드 강조. 에디터가 경고를 다는 방식 그대로
+   글자색 + 밑줄이고 면을 채우지 않습니다. 그린 강조(.tok-hl)가
+   '우리가 하고 싶은 말'이라면 이쪽은 '놓치면 곤란한 말'입니다.
+   한 섹션에 한 번까지만 씁니다. */
+.tok-alert {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ds-alert-strong);
+  text-decoration: underline;
+  text-decoration-color: var(--ds-alert);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  text-decoration-skip-ink: none;
+}
+
+/* 그린 면·반전 면 위에서는 레드가 읽히지 않습니다. 그런 면 안에서는
+   글자색을 면에 맡기고 밑줄만 남깁니다. */
+.apply-block .tok-alert,
+.block-navy .tok-alert {
+  color: inherit;
+  text-decoration-color: currentColor;
+}
+
 /* --- 버튼 --------------------------------------------- */
 .pill {
   display: inline-flex;
@@ -136,8 +162,8 @@
   color: var(--ds-on-primary);
 }
 
-/* 마감·모집처럼 의미가 있는 알림에만. 페이지에서 유일한 비그린이라
-   페이지당 1회를 넘기지 않습니다. */
+/* 레드가 면으로 채워지는 유일한 예외입니다. 지금 열려 있는 모집처럼
+   기한이 걸린 행동에만 쓰고, 페이지당 1회를 넘기지 않습니다. */
 .pill-alert {
   background: var(--ds-alert);
   color: var(--ds-inverse-ink);
@@ -145,6 +171,8 @@
   min-height: 40px;
   font-size: 15px;
 }
+
+.pill-alert:focus-visible { outline-color: var(--ds-alert-strong); }
 
 /* --- 섹션 리듬 ----------------------------------------- */
 /* 인접 섹션의 위·아래 패딩이 합쳐져 리듬 상수 96px 이 됩니다. */
@@ -164,6 +192,11 @@
   height: 1px;
   background: var(--ds-accent-line);
 }
+
+/* 섹션 경계는 전부 그린 1px 이지만, 페이지가 '이야기'에서 '요청'으로
+   넘어가는 이 한 줄만 레드입니다. 선의 색이 바뀌는 곳이 곧 성격이
+   바뀌는 곳 — 규칙 3의 연장입니다. 페이지당 한 번만 씁니다. */
+.section + .section-alert::before { background: var(--ds-alert-line); }
 
 /* 해시 딥링크(/#apply, /about#program)로 들어왔을 때 sticky nav(56px)가
    섹션 머리를 덮지 않도록 여백을 둡니다. */
@@ -283,6 +316,20 @@
 
 .hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-accent); }
 .hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-accent-strong); }
+
+/* 세 사실 중 지금 상태가 걸려 있는 항목 하나만 레드입니다. 라벨 앞의
+   작은 사각형은 에디터 거터의 마커와 같은 역할 — 훑어볼 때 이 줄에
+   먼저 눈이 가게 합니다. */
+.hero-facts .is-alert dt { color: var(--ds-alert); }
+.hero-facts .is-alert dd { color: var(--ds-alert-strong); }
+.hero-facts .is-alert dt::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  background: var(--ds-alert);
+}
 
 /* 포스터 패널: 페이지에서 유일한 대형 컬러 면입니다. */
 .hero-poster {
@@ -482,6 +529,8 @@
 .steps p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; color: var(--ds-ink-soft); }
 
 /* --- 04 APPLY ----------------------------------------- */
+/* 지금 열려 있는 모집을 알리는 줄. 페이지에서 유일하게 '기한'이 걸린
+   내용이라 왼쪽 바를 그린이 아니라 레드로 답니다. */
 .promo-banner {
   display: flex;
   align-items: center;
@@ -491,12 +540,27 @@
   background: var(--ds-surface);
   color: var(--ds-ink);
   border: 1px solid var(--ds-hairline);
+  border-left: 3px solid var(--ds-alert-line);
   border-radius: var(--ds-radius-sm);
   padding: var(--ds-space-md) var(--ds-space-lg);
   margin-bottom: var(--ds-space-xl);
 }
 
 .promo-banner p { margin: 0; font-size: 16px; font-weight: 300; line-height: 1.5; }
+
+/* 상태 라벨. 안내 문장과 성격이 달라 사이를 선으로 끊습니다(규칙 3). */
+.promo-banner .promo-flag {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--ds-alert);
+  padding-right: var(--ds-space-lg);
+  border-right: 1px solid var(--ds-hairline);
+}
+
+.promo-flag + p { flex: 1 1 260px; }
 
 /* 지원 섹션은 페이지에서 가장 큰 그린 면입니다. 선으로만 나뉘던
    흰 페이지가 여기서 통째로 색으로 뒤집히고, 그 면이 곧 CTA 입니다. */
@@ -601,7 +665,14 @@
   .cta-row { flex-direction: column; align-items: stretch; }
   .cta-row .pill { width: 100%; }
   .hero-facts { gap: var(--ds-space-lg); }
-  .promo-banner { flex-direction: column; align-items: flex-start; }
+  .promo-banner { flex-direction: column; align-items: flex-start; gap: var(--ds-space-sm); }
+  /* 세로로 쌓이면 오른쪽 선이 아무것도 나누지 못하므로 아래로 옮깁니다. */
+  .promo-banner .promo-flag {
+    align-self: stretch;
+    padding: 0 0 var(--ds-space-sm);
+    border-right: 0;
+    border-bottom: 1px solid var(--ds-hairline);
+  }
   .faq-item button { font-size: 17px; }
 }
 

@@ -9,8 +9,9 @@ const applicationUrl = import.meta.env.VITE_SEMICOLON_APPLICATION_URL || 'https:
 // 콘텐츠는 src/data/about.ts, 화면은 src/pages/AboutPage.tsx 를 보세요.
 
 // 히어로 아래 한 줄 요약. 회칙에 적힌 사실만 씁니다.
+// alert: 지금 행동을 바꾸는 항목 하나만 레드로 표시합니다(모집 상태).
 const heroFacts = [
-  { label: '모집', value: '1기 상시' },
+  { label: '모집', value: '1기 상시', alert: true },
   { label: '정기 모임', value: '수요일 18:00' },
   { label: '지원 자격', value: '전공·학년 무관' },
 ]
@@ -69,7 +70,7 @@ function App() {
           </div>
           <dl className="hero-facts">
             {heroFacts.map((fact) => (
-              <div key={fact.label}>
+              <div key={fact.label} className={fact.alert ? 'is-alert' : undefined}>
                 <dt>{fact.label}</dt>
                 <dd>{fact.value}</dd>
               </div>
@@ -130,8 +131,9 @@ function App() {
         <p className="eyebrow">03 — JOIN US</p>
         <div className="section-head reveal">
           <h2>우리의 다음 문장은<br />당신으로 이어집니다.</h2>
+          {/* 지원 문턱을 가장 많이 오해하는 대목이라 레드 밑줄로 짚습니다. */}
           <p className="subhead">
-            개발 경험이 없어도, 전공이 아니어도 새로운 것을 만들고 싶은 마음이면 충분해요.
+            <em className="tok-alert">개발 경험이 없어도, 전공이 아니어도</em> 새로운 것을 만들고 싶은 마음이면 충분해요.
           </p>
         </div>
         <ol className="steps">
@@ -145,8 +147,11 @@ function App() {
         </ol>
       </section>
 
-      <section className="section" id="apply">
+      {/* 페이지가 '이야기'에서 '요청'으로 넘어가는 지점. 이 섹션 위의
+          구분선만 그린이 아니라 레드입니다(.section-alert). */}
+      <section className="section section-alert" id="apply">
         <div className="promo-banner reveal">
+          <p className="promo-flag">모집 중</p>
           <p>2026학년도 1학기 신입 부원 모집이 진행 중입니다.</p>
           <a className="pill pill-alert" href={applicationUrl} target="_blank" rel="noreferrer">지금 신청하기</a>
         </div>
