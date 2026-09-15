@@ -54,8 +54,8 @@ function App() {
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">2026 · CHEONGWOON UNIV · CODING CLUB</p>
-          {/* 헤드라인은 에디터 본문처럼 줄 번호를 달고, 강조어는 드래그 선택처럼
-              그린 틴트로 칠합니다(.tok-hl). 페이지에서 한 번만 쓰는 서명입니다. */}
+          {/* 헤드라인은 에디터 본문처럼 줄 번호를 달고, 강조어는 면이 아니라
+              글자 자체를 그린으로 칠합니다(.tok-hl). 한 번만 쓰는 서명입니다. */}
           <h1 className="hero-title">
             <span className="hero-line"><i className="ln">01</i>혼자 배우던 코딩을,</span>
             <span className="hero-line"><i className="ln">02</i><em className="tok-hl">‘함께’</em> 완성하는</span>
@@ -131,7 +131,7 @@ function App() {
         <p className="eyebrow">03 — JOIN US</p>
         <div className="section-head reveal">
           <h2>우리의 다음 문장은<br />당신으로 이어집니다.</h2>
-          {/* 지원 문턱을 가장 많이 오해하는 대목이라 레드 밑줄로 짚습니다. */}
+          {/* 지원 문턱을 가장 많이 오해하는 대목이라 레드 글자색으로 짚습니다. */}
           <p className="subhead">
             <em className="tok-alert">개발 경험이 없어도, 전공이 아니어도</em> 새로운 것을 만들고 싶은 마음이면 충분해요.
           </p>

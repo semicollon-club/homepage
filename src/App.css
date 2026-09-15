@@ -8,9 +8,11 @@
    2. 그라디언트 없음 — 채워진 면은 전부 단색입니다.
    3. 섹션이 바뀔 때마다 풀블리드 그린 1px 구분선을 둡니다.
    4. 폰트는 IBM Plex Sans KR / IBM Plex Mono 두 역할뿐입니다.
-   5. 레드(--ds-alert)는 중요한 대목을 가리키는 표시입니다. 밑줄·왼쪽
-      바·거터 마커·구분선 한 줄처럼 선과 글자로만 쓰고, 면을 채우는
-      것은 작은 알림 버튼(.pill-alert) 하나뿐입니다.
+   5. 레드(--ds-alert)는 중요한 대목을 가리키는 표시입니다. 블록을
+      가르는 왼쪽 바·구분선 한 줄에만 쓰고, 면을 채우는 것은 작은
+      알림 버튼(.pill-alert) 하나뿐입니다.
+   6. 글줄 안의 강조는 글자색으로만 합니다 — 강조어 뒤에 면을 깔거나
+      밑줄·마커를 달지 않습니다(.tok-hl, .tok-alert).
    색상·여백·라운드는 index.css의 --ds-* 토큰만 사용합니다.
    공통 nav/footer는 layouts/Layout.css 참조.
 
@@ -97,27 +99,21 @@
   margin: 0;
 }
 
-/* 중요한 대목을 짚는 레드 강조. 에디터가 경고를 다는 방식 그대로
-   글자색 + 밑줄이고 면을 채우지 않습니다. 그린 강조(.tok-hl)가
-   '우리가 하고 싶은 말'이라면 이쪽은 '놓치면 곤란한 말'입니다.
-   한 섹션에 한 번까지만 씁니다. */
+/* 중요한 대목을 짚는 레드 강조. 밑줄도 면도 없이 글자만 칠합니다 —
+   그린 강조(.tok-hl)가 '우리가 하고 싶은 말'이라면 이쪽은 '놓치면
+   곤란한 말'이고, 둘의 차이는 색 하나로만 납니다. 한 섹션에 한 번까지. */
 .tok-alert {
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--ds-alert-strong);
-  text-decoration: underline;
-  text-decoration-color: var(--ds-alert);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.22em;
-  text-decoration-skip-ink: none;
 }
 
 /* 그린 면·반전 면 위에서는 레드가 읽히지 않습니다. 그런 면 안에서는
-   글자색을 면에 맡기고 밑줄만 남깁니다. */
+   글자색을 면에 맡기고 굵기로만 강조합니다. */
 .apply-block .tok-alert,
 .block-navy .tok-alert {
   color: inherit;
-  text-decoration-color: currentColor;
+  font-weight: 700;
 }
 
 /* --- 버튼 --------------------------------------------- */
@@ -275,18 +271,13 @@
   color: var(--ds-gutter);
 }
 
-/* 강조어는 에디터에서 한 구절을 드래그해 둔 것처럼 보입니다.
-   드래그 선택(::selection)과 같은 그린 틴트를 써서, 페이지의 강조가
-   전부 '같은 손짓'으로 읽히게 하는 것이 이 페이지의 서명입니다.
-   히어로에서 한 번만 쓰고, 다른 곳에서는 반복하지 않습니다. */
+/* 강조어는 글자 자체를 칠합니다. 뒤에 면을 깔면 그 구절만 다른 재질의
+   조각처럼 떠서 문장이 끊기는데, 글자만 칠하면 한 문장 안에서 한 단어의
+   목소리만 커집니다(규칙 6). 히어로에서 한 번만 씁니다. */
 .tok-hl {
   font-style: normal;
-  color: var(--ds-on-primary);
-  background: var(--ds-accent-tint);
-  border-radius: var(--ds-radius-xs);
-  padding-inline: 0.08em;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  font-weight: 600;
+  color: var(--ds-accent);
 }
 
 /* 마지막 세미콜론은 동아리 이름 그 자체라 단독으로 칠합니다.
@@ -317,19 +308,11 @@
 .hero-facts dt { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ds-accent); }
 .hero-facts dd { margin: var(--ds-space-xxs) 0 0; font-size: 15px; color: var(--ds-accent-strong); }
 
-/* 세 사실 중 지금 상태가 걸려 있는 항목 하나만 레드입니다. 라벨 앞의
-   작은 사각형은 에디터 거터의 마커와 같은 역할 — 훑어볼 때 이 줄에
-   먼저 눈이 가게 합니다. */
+/* 세 사실 중 지금 상태가 걸려 있는 항목 하나만 레드입니다. 마커도
+   바도 달지 않고 라벨과 값의 글자색만 바꿉니다 — 나머지 두 줄이
+   그린인 자리에서 색이 갈리는 것만으로 충분히 눈에 걸립니다. */
 .hero-facts .is-alert dt { color: var(--ds-alert); }
 .hero-facts .is-alert dd { color: var(--ds-alert-strong); }
-.hero-facts .is-alert dt::before {
-  content: '';
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 7px;
-  background: var(--ds-alert);
-}
 
 /* 포스터 패널: 페이지에서 유일한 대형 컬러 면입니다. */
 .hero-poster {
