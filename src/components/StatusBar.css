@@ -1,0 +1,20 @@
+/* 상태바 — 끌어내리면 패널이 따라 내려오므로 터치 스크롤을 막습니다 */
+.status-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  height: var(--statusbar-height);
+  padding: 0 var(--space-md);
+  background: var(--color-frame);
+  color: var(--color-canvas);
+  font: 700 13px/1 var(--font-ui);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.status-time { justify-self: start; }
+.status-callout { color: var(--color-primary); white-space: nowrap; }
+.status-icons { display: flex; gap: var(--space-xs); justify-self: end; }
