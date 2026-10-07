@@ -1,0 +1,27 @@
+/* 틴트 면 + 디스플레이 제목. 틴트는 tint-* 클래스나 감싼 앱 창에서 옵니다 */
+.eyebrow-block {
+  position: relative;
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-xxl) var(--space-lg);
+  background: var(--tint);
+  color: var(--color-ink);
+}
+
+.eyebrow-title {
+  padding-right: var(--space-section-lg);
+  font: 400 36px/1.08 var(--font-display);
+  word-break: keep-all;
+}
+
+.eyebrow-subtitle { font: 700 16px/1.45 var(--font-ui); word-break: keep-all; }
+
+.eyebrow-block > .sticker {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+}
+
+@media (max-width: 480px) {
+  .eyebrow-title { font-size: 28px; }
+}
