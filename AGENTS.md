@@ -23,13 +23,13 @@
 react-router가 아니라 **자체 구현 라우터**를 사용합니다:
 
 - 라우트 등록: `src/Router.tsx`의 `routes` 객체에 `'/경로': { Component, title }` 추가 (title = 브라우저 탭 제목)
-- 페이지 컴포넌트: `src/pages/` 아래 생성 — **nav/footer를 직접 만들지 마세요.** `layouts/Layout.tsx`가 모든 페이지에 자동 적용됩니다
+- 페이지 컴포넌트: `src/pages/` 아래 생성 — **상태바·독·제목줄을 직접 만들지 마세요.** `layouts/Layout.tsx`(OS 셸)가 모든 페이지를 앱 창으로 감쌉니다
 - 내부 링크: `src/components/Link.tsx`의 `<Link to="/경로">` 사용 — `<a href>`를 직접 쓰면 전체 페이지가 리로드되므로 금지 (외부 링크만 `<a>`)
 - 홈 섹션 이동: `<Link to="/#apply">`처럼 해시 경로도 지원 (다른 페이지에서도 동작)
 - 코드에서 이동: `src/lib/navigation.ts`의 `navigate('/경로')` 호출
 - 등록되지 않은 경로는 자동으로 404 페이지로 연결됩니다
 
-**새 페이지 추가 절차**: `src/pages/`에 컴포넌트+CSS 생성 → `Router.tsx`의 `routes`에 등록 → 필요한 곳에 `<Link>` 추가. 상세는 `docs/ARCHITECTURE.md` 참조.
+**새 페이지 추가 절차**: `src/pages/`에 컴포넌트(+CSS) 생성 → `Router.tsx`의 `routes`에 등록 → `src/data/apps.ts`에 아이콘·틴트 등록 → 필요한 곳에 `<Link>` 추가. 상세는 `docs/ARCHITECTURE.md` 참조.
 
 ## 백엔드 연동 — 로그인·API 호출 규칙
 
@@ -44,15 +44,15 @@ react-router가 아니라 **자체 구현 라우터**를 사용합니다:
 
 ```
 src/
-├─ pages/        # 라우트 단위 페이지 (PascalCase.tsx + 동명 .css)
-├─ layouts/      # 공통 레이아웃 (nav+footer — 페이지에서 직접 만들지 않음)
+├─ pages/        # 라우트 단위 페이지 (PascalCase.tsx + 전용 스타일이 있으면 동명 .css)
+├─ layouts/      # OS 셸 (상태바·패널·독·앱 창 — 페이지에서 직접 만들지 않음)
 ├─ components/   # 재사용 컴포넌트 (PascalCase.tsx, AuthProvider 포함)
 ├─ hooks/        # 커스텀 훅 (useAuth 등)
 ├─ lib/          # 순수 함수·유틸 (camelCase.ts)
 ├─ data/         # 콘텐츠 데이터 (부원·공지 등 — 컴포넌트에 하드코딩하지 말 것)
 ├─ assets/       # 이미지 등
 ├─ Router.tsx    # 라우트 정의 (경로 → 페이지 + 타이틀)
-├─ App.tsx       # 랜딩(/) 페이지
+├─ App.tsx       # 홈 화면(/)
 └─ main.tsx      # 진입점
 ```
 

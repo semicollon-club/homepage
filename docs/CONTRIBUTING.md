@@ -64,7 +64,7 @@ fix: 모바일에서 메뉴 겹치는 문제 수정
 
 ## 개발 규칙 요약 (상세는 docs/ARCHITECTURE.md)
 
-- 새 페이지: `src/pages/`에 생성 → `Router.tsx`에 등록 — nav/footer는 Layout이 자동 적용
+- 새 페이지: `src/pages/`에 생성 → `Router.tsx`에 등록 → `src/data/apps.ts`에 아이콘·틴트 등록 — 상태바·독·제목줄은 Layout(OS 셸)이 자동 적용
 - 내부 이동은 `<Link>`, 색상·폰트는 `index.css`의 디자인 토큰만 사용
 - 콘텐츠(명단·공지 등)는 `src/data/`로 분리
 - 백엔드 호출은 `src/lib/api.ts` 경유, 로그인 상태는 `useAuth()` 사용
