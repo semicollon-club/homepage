@@ -33,7 +33,7 @@
   left: calc(50% - 50vw);
   width: 100vw;
   background: var(--ds-canvas);
-  border-bottom: 1px solid var(--ds-hairline);
+  border-bottom: 1px solid var(--ds-accent-line);
   z-index: -1;
 }
 
@@ -46,8 +46,9 @@
   letter-spacing: -0.02em;
 }
 
-/* 로고의 세미콜론만 포스터 그린으로 칠합니다.
-   흰 배경 위 글자라 라임(#a6de4e)은 읽히지 않아 진한 그린을 씁니다. */
+/* 로고의 세미콜론은 포스터 그린. 흰 배경 위 글자라 라임(#a6de4e)은
+   읽히지 않아 램프의 진한 단계를 씁니다. nav 에서 시작한 이 그린이
+   본문의 라벨·강조어·구분선을 거쳐 footer 로고까지 이어집니다. */
 .logo span {
   font-family: var(--font-display);
   font-size: 24px;
@@ -67,7 +68,7 @@
 }
 
 .nav-links > a { padding-block: var(--ds-space-xs); }
-.nav-links > a:hover { color: var(--ds-syntax-prop); }
+.nav-links > a:hover { color: var(--ds-accent-strong); }
 
 .nav-cta,
 .nav-login {
@@ -84,18 +85,19 @@
   transition: filter 0.15s ease, border-color 0.15s ease;
 }
 
-.nav-cta { background: var(--ds-poster-gradient); color: var(--ds-on-primary); }
+.nav-cta { background: var(--ds-accent-fill); color: var(--ds-on-primary); }
 .nav-login { background: transparent; color: var(--ds-ink); border: 1px solid var(--ds-hairline); font-weight: 400; }
 .nav-cta:hover { filter: brightness(1.12); }
-.nav-login:hover { border-color: var(--ds-syntax-link); }
-.nav-cta:focus-visible, .nav-login:focus-visible { outline: 2px solid var(--ds-syntax-link); outline-offset: 3px; }
+.nav-login:hover { border-color: var(--ds-accent); }
+.nav-cta:focus-visible, .nav-login:focus-visible { outline: 2px solid var(--ds-accent); outline-offset: 3px; }
 
 .mobile-menu {
   display: none;
   width: 40px;
   height: 40px;
   border-radius: var(--ds-radius-full);
-  background: var(--ds-surface-soft);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-hairline);
   color: var(--ds-ink);
   font-size: 18px;
 }
@@ -119,7 +121,7 @@ footer {
   max-width: calc(1280px + var(--ds-space-xxl) * 2);
   margin-inline: auto;
   padding: var(--ds-space-section) var(--ds-space-xxl);
-  border-top: 1px solid var(--ds-hairline);
+  border-top: 1px solid var(--ds-accent-line);
   background: var(--ds-canvas);
   color: var(--ds-ink);
 }
