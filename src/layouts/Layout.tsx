@@ -42,7 +42,20 @@ function Layout({ path, home, app }: LayoutProps) {
     setUserNavigated(true)
   }
   const shownApp = app ?? closingApp
+
   const finishClosing = useCallback(() => setClosingApp(null), [])
+
+  // 앱을 연 링크. 앱이 닫히는 순간 포커스가 사라졌거나 닫히는 창(inert)에 남아 있으면
+  // 이 링크로 돌려줍니다 — 키보드 사용자가 처음부터 다시 Tab 하지 않도록.
+  const launcherRef = useRef<HTMLElement | null>(null)
+  const appOpen = app !== null
+  useEffect(() => {
+    if (appOpen) return
+    const active = document.activeElement
+    const focusLost = !active || active === document.body || active.closest('[inert]') !== null
+    const launcher = launcherRef.current
+    if (focusLost && launcher?.isConnected && !launcher.closest('[inert]')) launcher.focus()
+  }, [appOpen])
 
   // 패널이 열리면 패널로, 닫히면 상태바로 포커스를 옮깁니다.
   // (타일을 눌러 앱이 열리며 닫힌 경우는 앱 제목에 포커스가 가 있으므로 건드리지 않음)
@@ -62,8 +75,10 @@ function Layout({ path, home, app }: LayoutProps) {
   // 내부 링크를 누르면 그 자리를 기억해 둡니다 — 앱 창이 거기서부터 커집니다
   const rememberLaunchOrigin = (event: MouseEvent<HTMLDivElement>) => {
     if (!(event.target instanceof Element)) return
-    const link = event.target.closest('a[href^="/"]')
-    if (link) setLaunchOrigin(link)
+    const link = event.target.closest<HTMLElement>('a[href^="/"]')
+    if (!link) return
+    setLaunchOrigin(link)
+    if (link.getAttribute('href') !== '/') launcherRef.current = link
   }
 
   return (
