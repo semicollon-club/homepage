@@ -1,0 +1,72 @@
+/* 상태바 아래에서 내려오는 검정 패널. 닫혀 있을 때는 화면 위로 숨어 있습니다 */
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-frame);
+  color: var(--color-canvas);
+  transform: translateY(-100%);
+  transition: transform var(--motion-shade);
+}
+
+.shade.is-open { transform: translateY(0); }
+.shade.is-dragging { transition: none; }
+.shade:focus-visible { outline: none; }
+
+.shade-inner {
+  display: grid;
+  gap: var(--space-lg);
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+}
+
+.shade-time { font: 400 48px/1 var(--font-display); }
+.shade-date { margin-top: calc(var(--space-sm) * -1); font: 700 14px/1.2 var(--font-ui); }
+
+.shade-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shade-tile {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  min-height: 76px;
+  padding: var(--space-sm) var(--space-xs);
+  border: 1px solid var(--color-canvas);
+  color: var(--color-canvas);
+  font: 700 12px/1.2 var(--font-ui);
+  text-align: center;
+  text-decoration: none;
+}
+
+.shade-tile.is-hot { background: var(--color-sticker); color: var(--color-ink); }
+
+.shade-grip {
+  justify-self: center;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-xl);
+  color: var(--color-canvas);
+  font: 700 12px/1 var(--font-ui);
+  cursor: grab;
+  touch-action: none;
+}
+
+.shade-grip::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 4px;
+  margin: 0 auto var(--space-sm);
+  background: var(--color-canvas);
+}

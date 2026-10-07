@@ -1,177 +1,167 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@700&family=Noto+Serif+KR:wght@400;700&display=swap');
 
-/* 디자인 토큰 -----------------------------------------------
+/* 디자인 토큰 — Dell 1996 한국어 적응판 (docs/DESIGN.md)
    색상·폰트는 반드시 아래 변수로 사용합니다. (AGENTS.md 참조)
-   새 색상이 필요하면 임의 hex 대신 여기에 토큰을 추가하세요.
-
-   === 디자인 규칙 (2026-09 확정) ==========================
-   1. 파스텔 금지. 옅은 틴트 면을 만들지 않습니다. 면은 흰색이거나
-      원색 그린(#17a673)이거나 딥 네이비(#0b1f4d), 셋 중 하나입니다.
-   2. 그라디언트 금지. 채워진 면은 전부 단색입니다. 줄무늬·글자
-      그라디언트(background-clip: text)도 쓰지 않습니다.
-   3. 내용이 바뀌는 지점에는 반드시 구분선 또는 구분 면을 둡니다.
-      섹션 경계 = 원색 그린 1px 풀블리드 라인(--ds-accent-line),
-      카드·목록 내부 경계 = 중성 회색 1px(--ds-hairline).
-   4. 폰트는 역할별로 나누되 IBM Plex 한 superfamily 안에서만
-      고릅니다. 본문 Sans KR, 라벨·데이터·디스플레이 Mono.
-   5. 포인트 색은 그린·레드·블루 셋뿐이고 역할이 갈립니다.
-      그린(--ds-accent)  = 정체성. 면을 채우고 제목을 칠합니다.
-      레드(--ds-alert)   = 지금 걸려 있는 것. 선·글자로만 짚습니다.
-      블루(--ds-info)    = 구조와 안내. 번호·라벨·기호·반전 면.
-      장식으로 쓰지 않습니다 — 색마다 뜻이 하나씩 있습니다.
-   6. 글줄 안의 강조는 글자색으로만 합니다. 강조어 뒤에 면을 깔거나
-      밑줄·마커를 다는 방식은 쓰지 않습니다.
-   7. 세 색의 배치 비율은 그린:레드:블루 = 40:30:30 입니다. 면적이
-      아니라 '색이 쓰인 자리' 수 기준이고, 랜딩은 20자리를 8:6:6 으로
-      나눕니다. 자리 목록은 App.css 상단 주석에 적어 두었습니다.
-      새 포인트를 넣으려면 같은 색 자리 하나를 빼고 넣으세요.
-   ======================================================== */
+   새 색상이 필요하면 임의 hex 대신 여기에 토큰을 추가하세요. */
 :root {
-  /* --- 레거시 팔레트 (조직도·지원안내·로그인·404 페이지에서 사용 중) --- */
-  --color-bg: #f6f1e9;       /* 기본 배경 (크림) */
-  --color-bg-alt: #e4e0d9;   /* 보조 섹션 배경 */
-  --color-ink: #1d201d;      /* 기본 글자 · 다크 배경 */
-  --color-ink-soft: #697068; /* 보조 글자 */
-  --color-light: #f7f4ee;    /* 다크 배경 위 글자 */
-  --color-lime: #b7f320;     /* 포인트 (라임) */
-  --color-green: #188b4c;    /* 포인트 (그린) */
+  /* 포인트 — 레드는 CTA 패널·상태바 문구·오류 문구에만 씁니다 */
+  --color-primary: #e51c29;   /* Dell 레드. 원본 #e91d2a 는 흰 글자 대비 4.49:1 이라 AA 에 맞춰 조정 */
+  --color-on-primary: #ffffff;
+  --color-sticker: #fcc20f;   /* 노란 스티커·강조 타일 */
+  --color-link: #0000ee;      /* 1996 기본 링크 파랑 — 흰 면 위에서만 */
 
-  /* --- 디자인 시스템 토큰 (docs/DESIGN.md) ---------------------
-     흰 캔버스 + 모집 포스터의 그린 한 색. 포인트 색은 버튼 전용이
-     아니라 페이지 전체를 관통합니다 — 라벨, 줄 번호, 강조어,
-     섹션 구분선, 블록 액센트 바, 반전 패널까지 전부 같은 그린입니다.
-     랜딩(/)·소개(/about)와 공통 nav/footer가 이 토큰을 씁니다. */
-  --ds-ink: #000000;            /* 기본 글자 */
-  --ds-ink-soft: #4f5f57;       /* 보조 글자 (그린 쪽으로 살짝 기운 회색) */
-  --ds-canvas: #ffffff;         /* 기본 캔버스 */
-  --ds-surface: #ffffff;        /* 카드 면 (틴트 없이 선으로만 구분) */
-  --ds-surface-soft: #ffffff;   /* 타일 면 — 옅은 틴트 금지(규칙 1) */
-  --ds-on-primary: #0d0d0d;     /* 원색 그린 면 위 글자 (대비 7.2:1) */
-  --ds-inverse-canvas: #0b1f4d; /* 반전 면 (딥 네이비 — 블루 램프) */
-  --ds-inverse-ink: #ffffff;
-  --ds-inverse-ink-soft: #c8cdcb; /* 반전 면 보조 글자 — 중성 회색 */
-  --ds-hairline: #d7d7d7;       /* 중성 1px 경계 (카드·목록 내부) */
-  --ds-hairline-soft: #e6e6e6;  /* 더 옅은 중성 경계 */
-  --ds-gutter: #6b6b6b;         /* 에디터 줄 번호 (흰 배경 대비 5.7:1) */
+  /* 면·글자 */
+  --color-canvas: #ffffff;    /* 흰 면, 검정 면 위의 글자 */
+  --color-ink: #000000;
+  --color-frame: #000000;     /* 기기 테두리·상태바·패널·1px 선 */
 
-  /* --- 그린 램프 ---------------------------------------------
-     전부 포스터 그린(#17a673)·라임(#a6de4e)에서 뽑은 한 색조입니다.
-     채도를 낮춘 틴트 단계(50/100/200)는 규칙 1에 따라 삭제했습니다. */
-  --ds-green-950: #062a1e;   /* 딥 파인 — 반전 면이 딥 네이비로 넘어가면서
-                                현재 랜딩에서는 쓰이지 않습니다(램프 보존용) */
-  --ds-green-800: #0a5c40;   /* 강한 강조 글자 (8.0:1) */
-  --ds-green-700: #0d7d57;   /* 기본 액센트 글자 (5.1:1) */
-  --ds-green-600: #17a673;   /* 포스터 그린 — 채워진 면·구분선 */
-  --ds-green-400: #a6de4e;   /* 포스터 라임 — 반전 면 위에서만 */
+  /* 틴트 — 앱마다 하나씩 (src/data/apps.ts). 아래 .tint-* 클래스로 씁니다 */
+  --color-tint-olive: #8e8a25;
+  --color-tint-sage: #b3bd95;
+  --color-tint-salmon: #d77a7a;
+  --color-tint-peach: #e6915d;
+  --color-tint-lime: #c0d4a7;
+  --color-tint-sky: #9ab6c8;
+  --color-tint-steel: #a5b8c0;
+  --color-tint-periwinkle: #8c9ae0;
 
-  /* 역할 토큰 — 컴포넌트는 램프 대신 이쪽을 참조합니다. */
-  --ds-accent: var(--ds-green-700);
-  --ds-accent-strong: var(--ds-green-800);
-  --ds-accent-fill: var(--ds-green-600);
-  --ds-accent-bright: var(--ds-green-400);
-  /* 섹션 경계선. 원색 그린 1px 이 페이지를 가로지르며 내용 전환을
-     알립니다(규칙 3). 면이 아니라 선이라 톤이 뜨지 않습니다. */
-  --ds-accent-line: var(--ds-green-600);
-  /* 드래그 선택 면 — 틴트가 아니라 원색 그린입니다. 글줄 강조에는
-     쓰지 않습니다(규칙 6): 강조는 글자색으로만 합니다. */
-  --ds-accent-tint: var(--ds-green-600);
-  --ds-accent-surface: var(--ds-green-600);
-  /* --- 알림 레드 (2026-09 추가) -------------------------------
-     그린과 짝을 이루는 두 번째 포인트 색입니다. 둘의 역할이 다릅니다.
-     그린 = 동아리의 정체성. 면을 채우고 페이지를 관통합니다.
-     레드 = 놓치면 곤란한 정보의 표시. 글줄 안에서는 글자색으로만,
-     블록 단위로는 왼쪽 바·구분선 한 줄로만 씁니다.
-     빨간 대형 면은 만들지 않습니다 — 채워지는 면은 여전히 흰색·원색
-     그린·딥 파인 셋뿐이고, 예외는 작은 알림 버튼(.pill-alert)뿐입니다.
-     그린 면(#17a673) 위에는 대비가 안 나오므로 레드를 올리지 않습니다. */
-  --ds-red-700: #9e1111;   /* 강한 강조 글자 (흰 배경 대비 8.3:1) */
-  --ds-red-600: #d01717;   /* 기본 알림 — 글자 5.5:1 · 마커 · 선 */
-  --ds-alert: var(--ds-red-600);
-  --ds-alert-strong: var(--ds-red-700);
-  --ds-alert-line: var(--ds-red-600);
+  /* 폰트 — 영문은 1996 시스템 폰트, 한글은 같은 역할의 웹폰트 */
+  --font-display: 'Arial Black', 'Black Han Sans', sans-serif;
+  --font-ui: Helvetica, Arial, 'Noto Sans KR', sans-serif;
+  --font-body: 'Times New Roman', Times, 'Noto Serif KR', serif;
 
-  /* --- 안내 블루 (2026-09 추가) -------------------------------
-     세 번째 포인트 색이고 역할은 '구조와 안내' 입니다. 섹션 번호,
-     줄 번호, 데이터 라벨, 단계 라벨, 보조 링크, 펼침 기호처럼
-     내용을 읽는 순서와 위치를 알려주는 표지에 씁니다.
-     그린 = 우리가 누구인지, 레드 = 지금 걸려 있는 것,
-     블루 = 지금 어디를 읽고 있는지.
-     흰 배경 위에서는 글자·선으로만 쓰고, 면으로는 반전 패널 하나를
-     맡습니다(딥 네이비). 원색 블루로 큰 면을 채우지 않습니다. */
-  --ds-blue-900: #0b1f4d;  /* 반전 면 (딥 네이비) — 흰 글자 15.8:1 */
-  --ds-blue-800: #0a3a9e;  /* 강한 안내 글자 (9.9:1) */
-  --ds-blue-700: #0b4fd6;  /* 기본 안내 — 글자 6.8:1 · 선 · 기호 */
-  --ds-info: var(--ds-blue-700);
-  --ds-info-strong: var(--ds-blue-800);
-  --ds-info-line: var(--ds-blue-700);
-  --ds-info-surface: var(--ds-blue-900);
+  /* 간격 */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-s: 6px;
+  --space-sm: 8px;
+  --space-m: 10px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+  --space-section-sm: 32px;
+  --space-section: 40px;
+  --space-section-lg: 48px;
 
-  /* 포스터 색. 그라디언트는 규칙 2에 따라 삭제했고, 채워진 면은
-     단색 그린, 흰 배경 위 글자는 램프의 진한 단계를 씁니다. */
-  --ds-poster-green: var(--ds-green-600);
-  --ds-poster-lime: var(--ds-green-400);
-  --ds-poster-green-ink: var(--ds-green-700);
+  /* OS 셸 치수 */
+  --frame-width: 8px;
+  --statusbar-height: 32px;
+  --dock-height: 64px;
+  --content-width: 760px;
 
-  /* 컬러블록: 틴트 면을 쓰지 않습니다. 전부 흰 면이고, 블록끼리의
-     구분은 왼쪽 액센트 바의 깊이(fill → accent → strong)가 냅니다.
-     토큰 이름은 기존 사용처와의 호환을 위해 유지합니다. */
-  --ds-block-lime: var(--ds-surface);
-  --ds-block-lilac: var(--ds-surface);
-  --ds-block-cream: var(--ds-surface);
-  --ds-block-pink: var(--ds-surface);
-  --ds-block-mint: var(--ds-surface);
-  --ds-block-coral: var(--ds-surface);
-  --ds-block-navy: var(--ds-blue-900);  /* 페이지에서 유일한 반전 면 */
-  --ds-success: var(--ds-green-700);
+  /* 패널이 내려오는 움직임 — 1996년 화면처럼 계단식으로 끊깁니다.
+     앱 창 열기·닫기도 같은 320ms 입니다 (components/AppWindow.tsx). */
+  --motion-shade: 320ms steps(6);
 
-  /* 라운드 스케일 */
-  --ds-radius-xs: 2px;
-  --ds-radius-sm: 6px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 24px;
-  --ds-radius-xl: 32px;
-  --ds-radius-pill: 50px;
-  --ds-radius-full: 9999px;
-
-  /* 여백 스케일 (기본 단위 8px) */
-  --ds-space-xxs: 4px;
-  --ds-space-xs: 8px;
-  --ds-space-sm: 12px;
-  --ds-space-md: 16px;
-  --ds-space-lg: 24px;
-  --ds-space-xl: 32px;
-  --ds-space-xxl: 48px;
-  --ds-space-section: 96px;
-
-  --ds-container: 1280px;
-
-  /* 폰트(규칙 4): IBM Plex 한 superfamily 안에서 역할만 나눕니다.
-     본문·제목은 Sans KR, 라벨·줄 번호·데이터·디스플레이는 Mono.
-     두 얼굴이 같은 골격을 공유해 섞여도 톤이 어긋나지 않습니다. */
-  --font-sans: 'IBM Plex Sans KR', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'SF Mono', menlo, monospace;
-  --font-display: 'IBM Plex Mono', 'SF Mono', menlo, monospace;
-
-  font-family: var(--font-sans);
-  font-feature-settings: 'kern' 1;
-  background: var(--ds-canvas);
-  color: var(--ds-ink);
   color-scheme: light;
-  font-synthesis: none;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  /* 한글은 어절(띄어쓰기) 단위로 줄을 바꿉니다. 너무 긴 단어만 칸에 맞춰 끊습니다 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  color: var(--color-ink);
+  background: var(--color-frame);
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: var(--ds-canvas); }
-button, a { font: inherit; }
-button { cursor: pointer; border: 0; }
-a { color: inherit; text-decoration: none; }
-/* 드래그 선택도 같은 그린입니다. 페이지 안에서 손이 닿는 모든 곳이
-   한 색으로 반응합니다. */
-::selection { background: var(--ds-accent-tint); color: var(--ds-on-primary); }
+@media (max-width: 768px) {
+  :root { --frame-width: 4px; }
+}
+
+@media (max-width: 480px) {
+  :root { --frame-width: 2px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  :root { --motion-shade: 0s; }
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: var(--color-frame); }
+h1, h2, h3, p, ul, ol { margin: 0; }
+button, input { font: inherit; color: inherit; }
+button { padding: 0; border: 0; background: none; cursor: pointer; }
+a { color: var(--color-link); }
+svg { display: block; }
+
+/* 키보드 포커스 — 점선 외곽선. 호버 스타일은 두지 않습니다 (docs/DESIGN.md) */
+:focus-visible { outline: 2px dotted var(--color-ink); outline-offset: 2px; }
+.on-dark:focus-visible,
+.on-dark :focus-visible { outline-color: var(--color-canvas); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 틴트 — 요소에 tint-<이름> 클래스를 주면 그 안에서 var(--tint) 로 씁니다 */
+.tint-olive { --tint: var(--color-tint-olive); }
+.tint-sage { --tint: var(--color-tint-sage); }
+.tint-salmon { --tint: var(--color-tint-salmon); }
+.tint-peach { --tint: var(--color-tint-peach); }
+.tint-lime { --tint: var(--color-tint-lime); }
+.tint-sky { --tint: var(--color-tint-sky); }
+.tint-steel { --tint: var(--color-tint-steel); }
+.tint-periwinkle { --tint: var(--color-tint-periwinkle); }
+
+/* 틴트 면 안의 링크는 파랑 대신 검정 밑줄 (파랑은 틴트 5색에서 대비 미달) */
+.on-tint a { color: var(--color-ink); }
+
+/* 버튼 2종 — 검정 채움 / 흰 테두리. 모서리 0, 대문자 라벨 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  gap: var(--space-s);
+  min-height: 44px;
+  padding: var(--space-s) var(--space-lg);
+  border: 1px solid var(--color-frame);
+  font: 700 13px/1.2 var(--font-ui);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.btn-primary { background: var(--color-frame); color: var(--color-on-primary); }
+.btn-secondary { background: var(--color-canvas); color: var(--color-ink); }
+
+/* 화면(홈·앱) 본문 — 카탈로그 폭 760px 가운데 */
+.page {
+  display: grid;
+  gap: var(--space-lg);
+  align-content: start;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-lg) var(--space-section);
+}
+.page-heading { margin-top: var(--space-md); font: 700 16px/1.35 var(--font-ui); text-transform: uppercase; }
+.stack { display: grid; gap: var(--space-md); margin: 0; padding: 0; list-style: none; }
+
+/* 레드 CTA 패널 — 페이지당 1회만 */
+.cta-panel {
+  display: grid;
+  gap: var(--space-md);
+  justify-items: start;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-frame);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.cta-note { font-size: 14px; }
+
+/* 데이터 표 — 1px 검정 줄, 머리와 첫 칸은 UI 폰트 */
+.data-table { width: 100%; border: 1px solid var(--color-frame); border-collapse: collapse; background: var(--color-canvas); }
+.data-table th,
+.data-table td { padding: var(--space-s) var(--space-md); border-bottom: 1px solid var(--color-frame); text-align: left; vertical-align: top; }
+.data-table th { font: 700 12px/1.3 var(--font-ui); text-transform: uppercase; }
+.data-table td:first-child { font: 700 13px/1.55 var(--font-ui); white-space: nowrap; }

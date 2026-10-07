@@ -1,0 +1,28 @@
+.dock {
+  border-top: 1px solid var(--color-frame);
+  background: var(--color-canvas);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.dock ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: var(--content-width);
+  height: var(--dock-height);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.dock-item {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-xxs);
+  height: 100%;
+  color: var(--color-ink);
+  font: 700 12px/1.2 var(--font-ui);
+  text-decoration: none;
+}
+
+.dock-item[aria-current='page'] { background: var(--color-frame); color: var(--color-canvas); }
