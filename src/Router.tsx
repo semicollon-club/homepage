@@ -2,10 +2,12 @@ import { useEffect, useState, type ReactElement } from 'react'
 import App from './App'
 import Layout from './layouts/Layout'
 import AboutPage from './pages/AboutPage'
+import ActivitiesPage from './pages/ActivitiesPage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import OrganizationPage from './pages/OrganizationPage'
 import RecruitPage from './pages/RecruitPage'
+import SchedulePage from './pages/SchedulePage'
 import { findApp } from './data/apps'
 import { LOCATION_CHANGE_EVENT } from './lib/navigation'
 
@@ -20,6 +22,8 @@ interface Route {
 const routes: Record<string, Route> = {
   '/': { Component: App, title: SITE_NAME },
   '/about': { Component: AboutPage, title: `동아리 소개 | ${SITE_NAME}` },
+  '/activities': { Component: ActivitiesPage, title: `활동 | ${SITE_NAME}` },
+  '/schedule': { Component: SchedulePage, title: `일정 | ${SITE_NAME}` },
   '/organization': { Component: OrganizationPage, title: `조직도 | ${SITE_NAME}` },
   '/recruit': { Component: RecruitPage, title: `지원 안내 | ${SITE_NAME}` },
   '/login': { Component: LoginPage, title: `로그인 | ${SITE_NAME}` },
