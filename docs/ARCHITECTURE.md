@@ -7,14 +7,15 @@ homepage/
 ├─ public/                # 정적 파일 (빌드 시 그대로 복사, favicon 등)
 ├─ src/
 │  ├─ assets/             # 이미지 등 번들에 포함되는 정적 리소스
-│  ├─ components/         # 재사용 UI 컴포넌트 (예: Link.tsx)
-│  ├─ layouts/            # 공통 레이아웃 (Layout.tsx = nav + footer, 모든 페이지에 자동 적용)
+│  ├─ components/         # 재사용 UI 컴포넌트 (Link, OS 셸 부품, Dell 컴포넌트)
+│  ├─ hooks/              # 커스텀 훅 (useAuth, useClock, usePullDown)
+│  ├─ layouts/            # OS 셸 (Layout.tsx = 상태바·내려오는 패널·독·앱 창, 모든 페이지에 자동 적용)
 │  ├─ lib/                # 순수 함수·유틸 (예: navigation.ts)
 │  ├─ pages/              # 라우트 단위 페이지 (예: OrganizationPage.tsx, NotFoundPage.tsx)
 │  ├─ data/               # 콘텐츠 데이터 (부원·프로젝트·공지 등, 아래 규칙 참조)
 │  ├─ Router.tsx          # 라우트 정의 (경로 → 페이지 + 타이틀)
-│  ├─ App.tsx             # 랜딩(/) 페이지
-│  ├─ App.css             # 랜딩 스타일
+│  ├─ App.tsx             # 홈 화면(/) — 앱 아이콘 격자
+│  ├─ App.css             # 홈 화면 스타일
 │  ├─ index.css           # 전역 스타일 + 디자인 토큰
 │  └─ main.tsx            # 진입점 (ReactDOM 렌더)
 ├─ docs/                  # 협업 문서
@@ -33,19 +34,20 @@ homepage/
 
 | 토큰 | 용도 |
 | --- | --- |
-| `--color-bg` / `--color-bg-alt` | 기본 배경(크림) / 보조 섹션 배경 |
-| `--color-ink` / `--color-ink-soft` | 기본 글자·다크 배경 / 보조 글자 |
-| `--color-light` | 다크 배경 위 글자 |
-| `--color-lime` / `--color-green` | 포인트 색 |
-| `--font-sans` / `--font-mono` | 본문 / 모노(라벨·코드) 폰트 |
+| `--color-primary` / `--color-on-primary` | Dell 레드(CTA 패널·상태바 문구·오류 문구) / 그 위 글자 |
+| `--color-canvas` / `--color-ink` / `--color-frame` | 흰 면(검정 면 위 글자) / 검정 글자 / 기기 테두리·1px 선 |
+| `--color-sticker` / `--color-link` | 노란 스티커 / 1996 링크 파랑(흰 면 위에서만) |
+| `--color-tint-*` (8색) | 앱마다 하나 — `.tint-<이름>` 클래스로 `--tint` 에 연결 |
+| `--font-display` / `--font-ui` / `--font-body` | 제목(Arial Black·블랙한산스) / 라벨·버튼(Helvetica·노토 산스 KR) / 본문(Times·노토 세리프 KR) |
+| `--space-*`, `--frame-width`, `--statusbar-height`, `--dock-height`, `--content-width` | 간격, OS 셸 치수 |
 
-새 색상이 필요하면 임의 hex 대신 `index.css`에 토큰을 추가하고 이 표를 갱신하세요.
+새 색상이 필요하면 임의 hex 대신 `index.css`에 토큰을 추가하고 이 표를 갱신하세요. 디자인 규칙은 `docs/DESIGN.md`를 따릅니다.
 (장식용 일회성 색상 — 일러스트·터미널 아트 등 — 은 예외적으로 literal 허용)
 
 ## 새 페이지 추가 절차
 
-1. `src/pages/`에 `PascalCase.tsx` + 동명 `.css` 생성 (nav/footer는 만들지 않음 — Layout이 자동 적용)
-2. `src/Router.tsx`의 `routes`에 `'/경로': { Component, title }` 등록
+1. `src/pages/`에 `PascalCase.tsx` (+ 페이지 전용 스타일이 있으면 동명 `.css`) 생성 — 상태바·독·제목줄은 만들지 않음 (Layout·AppWindow가 자동 적용)
+2. `src/Router.tsx`의 `routes`에 `'/경로': { Component, title }` 등록하고, `src/data/apps.ts`에 이름·아이콘·틴트 등록 (홈 화면 아이콘에 나타남)
 3. 이동이 필요한 곳에 `<Link to="/경로">` 추가 (`components/Link.tsx`)
 4. 콘텐츠 데이터가 있으면 컴포넌트에 하드코딩하지 말고 `src/data/`로 분리 (아래 참조)
 
@@ -72,6 +74,7 @@ react-router를 쓰지 않고 `Router.tsx` + `lib/navigation.ts` + `components/L
 - `<a href>` 직접 사용 금지 (전체 페이지 리로드 발생). 외부 링크만 `<a target="_blank">` 사용
 - 라우트별 `document.title`은 `Router.tsx`의 `routes`에서 관리
 - 등록되지 않은 경로는 자동으로 404 페이지(`pages/NotFoundPage.tsx`)로 연결
+- 스크롤은 브라우저 창이 아니라 OS 셸 안의 영역에서 일어납니다 — 코드로 스크롤할 때는 `lib/scroll.ts`의 `getActiveScrollRoot()` 사용
 
 ## 네이밍 규칙
 
