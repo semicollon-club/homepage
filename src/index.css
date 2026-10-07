@@ -58,6 +58,9 @@
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.55;
+  /* 한글은 어절(띄어쓰기) 단위로 줄을 바꿉니다. 너무 긴 단어만 칸에 맞춰 끊습니다 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   color: var(--color-ink);
   background: var(--color-frame);
   -webkit-font-smoothing: antialiased;
