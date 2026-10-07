@@ -25,7 +25,7 @@ interface AppWindowProps {
 /** 앱 창 — 상태바와 독 사이를 덮는 화면. 검정 제목줄 + 스크롤되는 본문 */
 function AppWindow({ info, animateOpen, closing, onClosed, children }: AppWindowProps) {
   const windowRef = useRef<HTMLElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
+  const bodyRef = useRef<HTMLDivElement>(null)
   const shouldAnimateOpen = useRef(animateOpen)
 
   // 마운트 때 한 번: 누른 아이콘 자리를 기준점으로 잡고 거기서부터 커집니다
@@ -38,7 +38,8 @@ function AppWindow({ info, animateOpen, closing, onClosed, children }: AppWindow
       element.style.transformOrigin = `${origin.x - rect.left}px ${origin.y - rect.top}px`
     }
     if (!shouldAnimateOpen.current) return
-    titleRef.current?.focus({ preventScroll: true })
+    // 본문(스크롤 영역)에 포커스 — 화면낭독기는 앱 이름을 읽고, 방향키·스페이스로 바로 스크롤됩니다
+    bodyRef.current?.focus({ preventScroll: true })
     if (prefersReducedMotion()) return
     const animation = element.animate([{ transform: SHRUNK }, { transform: FULL }], MOTION)
     return () => animation.cancel()
@@ -60,17 +61,20 @@ function AppWindow({ info, animateOpen, closing, onClosed, children }: AppWindow
   const titleId = `app-title-${info.icon}`
 
   return (
-    <section
-      ref={windowRef}
-      className={`app-window tint-${info.tint}`}
-      aria-labelledby={titleId}
-      inert={closing}
-    >
+    <section ref={windowRef} className={`app-window tint-${info.tint}`} inert={closing}>
       <header className="app-titlebar on-dark">
-        <h1 id={titleId} ref={titleRef} tabIndex={-1}>{info.label}</h1>
+        <h1 id={titleId}>{info.label}</h1>
         <Link to="/" className="app-close" aria-label={`${info.label} 닫기`}>닫기 ×</Link>
       </header>
-      <div className="app-body" data-scroll-root={closing ? undefined : 'app'}>
+      {/* 키보드로도 스크롤할 수 있게 포커스를 받는 영역입니다 (본문에 링크가 없는 앱도 있음) */}
+      <div
+        ref={bodyRef}
+        className="app-body"
+        role="region"
+        aria-labelledby={titleId}
+        tabIndex={0}
+        data-scroll-root={closing ? undefined : 'app'}
+      >
         {children}
       </div>
     </section>

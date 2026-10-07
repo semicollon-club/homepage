@@ -32,3 +32,6 @@
 }
 
 .app-body { overflow-y: auto; overscroll-behavior-y: contain; }
+
+/* 본문 영역의 포커스 표시는 안쪽에 그립니다 (바깥은 검정 제목줄·독에 가려짐) */
+.app-body:focus-visible { outline-offset: -3px; }
