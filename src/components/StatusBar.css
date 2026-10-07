@@ -15,6 +15,9 @@
   user-select: none;
 }
 
+/* 바깥은 검정 프레임이라 포커스 점선을 안쪽에 그립니다 */
+.status-bar:focus-visible { outline-offset: -4px; }
+
 .status-time { justify-self: start; }
 .status-callout { color: var(--color-primary); white-space: nowrap; }
 .status-icons { display: flex; gap: var(--space-xs); justify-self: end; }

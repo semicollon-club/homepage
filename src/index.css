@@ -90,6 +90,7 @@ svg { display: block; }
 
 /* 키보드 포커스 — 점선 외곽선. 호버 스타일은 두지 않습니다 (docs/DESIGN.md) */
 :focus-visible { outline: 2px dotted var(--color-ink); outline-offset: 2px; }
+.on-dark:focus-visible,
 .on-dark :focus-visible { outline-color: var(--color-canvas); }
 
 .sr-only {
