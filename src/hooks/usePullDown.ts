@@ -97,6 +97,7 @@ export function usePullDown(
 
   const toggle = useCallback(() => {
     if (performance.now() - lastDragEnd.current < CLICK_GUARD_MS) return
+    setPull(null) // 끌다 만 위치가 남아 있으면 열림·닫힘 위치를 가리므로 함께 지웁니다
     setOpen((value) => !value)
   }, [])
 
@@ -107,14 +108,24 @@ export function usePullDown(
     if (!area) return
     let wheelPull = 0
     let wheelTimer = 0
+    let lastWheelAt = -Infinity
     let touchStartY: number | null = null
     let touchPull = 0
+    let touchPulling = false // 이번 터치에서 패널을 움직이기 시작했는지
 
     const atTop = () => (getActiveScrollRoot()?.scrollTop ?? 0) <= 0
 
     const onWheel = (event: WheelEvent) => {
-      if (openRef.current) return
-      if (wheelPull === 0 && (event.deltaY >= 0 || !atTop())) return
+      const sincePreviousWheel = event.timeStamp - lastWheelAt
+      lastWheelAt = event.timeStamp
+      // Ctrl·⌘ + 휠(트랙패드 핀치 포함)은 브라우저 확대·축소라 건드리지 않습니다
+      if (openRef.current || event.ctrlKey || event.metaKey) return
+      if (wheelPull === 0) {
+        // 위로 굴리다 맨 위에 막 닿은 관성 휠은 당기기로 보지 않고,
+        // 맨 위에서 잠깐 멈췄다가 새로 굴린 휠부터 당기기로 봅니다
+        const freshGesture = sincePreviousWheel > WHEEL_SETTLE_MS
+        if (event.deltaY >= 0 || !atTop() || !freshGesture) return
+      }
       event.preventDefault()
       const delta = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? event.deltaY * LINE_HEIGHT : event.deltaY
       wheelPull = clampPull(wheelPull - delta)
@@ -126,41 +137,54 @@ export function usePullDown(
       }, WHEEL_SETTLE_MS)
     }
 
-    const onTouchStart = (event: TouchEvent) => {
-      touchStartY = !openRef.current && atTop() ? event.touches[0].clientY : null
+    /** 당기기를 그만두고, 움직이던 패널이 있으면 제자리(닫힘)로 돌립니다 */
+    const resetTouch = () => {
+      if (touchPulling) setPull(null)
+      touchStartY = null
       touchPull = 0
+      touchPulling = false
+    }
+
+    const onTouchStart = (event: TouchEvent) => {
+      resetTouch()
+      // 두 손가락(핀치 확대 등)은 패널과 상관없이 브라우저에 맡깁니다
+      if (event.touches.length > 1) return
+      touchStartY = !openRef.current && atTop() ? event.touches[0].clientY : null
     }
 
     const onTouchMove = (event: TouchEvent) => {
       if (touchStartY === null) return
       const delta = event.touches[0].clientY - touchStartY
-      if (touchPull === 0 && delta <= 0) {
-        touchStartY = null // 위로 밀었으면 평소처럼 스크롤합니다
+      if (!touchPulling && delta <= 0) {
+        touchStartY = null // 처음에 위로 밀었으면 평소처럼 스크롤합니다
         return
       }
       event.preventDefault()
+      touchPulling = true
       touchPull = clampPull(delta)
       setPull(touchPull)
     }
 
     const onTouchEnd = () => {
-      if (touchStartY === null) return
+      // settle 이 끌기 상태(pull)를 지우므로, 끝까지 되돌려 0 이 됐어도 닫힌 채로 정리됩니다
+      if (touchPulling) settle(touchPull, false)
       touchStartY = null
-      if (touchPull > 0) settle(touchPull, false)
+      touchPull = 0
+      touchPulling = false
     }
 
     area.addEventListener('wheel', onWheel, { passive: false })
     area.addEventListener('touchstart', onTouchStart, { passive: true })
     area.addEventListener('touchmove', onTouchMove, { passive: false })
     area.addEventListener('touchend', onTouchEnd)
-    area.addEventListener('touchcancel', onTouchEnd)
+    area.addEventListener('touchcancel', resetTouch)
     return () => {
       window.clearTimeout(wheelTimer)
       area.removeEventListener('wheel', onWheel)
       area.removeEventListener('touchstart', onTouchStart)
       area.removeEventListener('touchmove', onTouchMove)
       area.removeEventListener('touchend', onTouchEnd)
-      area.removeEventListener('touchcancel', onTouchEnd)
+      area.removeEventListener('touchcancel', resetTouch)
     }
   }, [areaRef, clampPull, settle])
 
