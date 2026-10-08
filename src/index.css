@@ -81,7 +81,8 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; background: var(--color-frame); }
+/* min-width 를 두지 않습니다 — 문서가 스크롤하지 않아서, 넘친 폭은 잘린 채 볼 수 없게 됩니다 (접는 폰 바깥 화면 280px 등) */
+body { margin: 0; background: var(--color-frame); }
 h1, h2, h3, p, ul, ol { margin: 0; }
 button, input { font: inherit; color: inherit; }
 button { padding: 0; border: 0; background: none; cursor: pointer; }
