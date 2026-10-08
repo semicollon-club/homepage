@@ -22,6 +22,9 @@
   right: var(--space-md);
 }
 
+/* 좁은 화면에서는 스티커를 블록 위쪽 가장자리에 걸쳐 붙입니다 (테이프로 붙인 느낌).
+   제목 오른쪽 자리를 비워 둘 필요가 없어져 제목이 폭을 다 쓰고, 스티커와 겹치지 않습니다. */
 @media (max-width: 480px) {
-  .eyebrow-title { font-size: 28px; }
+  .eyebrow-title { padding-right: 0; font-size: 28px; }
+  .eyebrow-block > .sticker { top: calc(var(--space-sm) * -1); }
 }
