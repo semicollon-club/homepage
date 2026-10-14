@@ -4,6 +4,7 @@ import Layout from './layouts/Layout'
 import AboutPage from './pages/AboutPage'
 import ActivitiesPage from './pages/ActivitiesPage'
 import LoginPage from './pages/LoginPage'
+import IpodLandingPage from './pages/IpodLandingPage'
 import NotFoundPage from './pages/NotFoundPage'
 import OrganizationPage from './pages/OrganizationPage'
 import RecruitPage from './pages/RecruitPage'
@@ -27,6 +28,7 @@ const routes: Record<string, Route> = {
   '/organization': { Component: OrganizationPage, title: `조직도 | ${SITE_NAME}` },
   '/recruit': { Component: RecruitPage, title: `지원 안내 | ${SITE_NAME}` },
   '/login': { Component: LoginPage, title: `로그인 | ${SITE_NAME}` },
+  '/ipod': { Component: IpodLandingPage, title: `iPod 세미콜론 | ${SITE_NAME}` },
 }
 
 /** 섹션이 앱으로 나뉘면서 바뀐 옛 주소 → 새 주소 */
@@ -71,6 +73,8 @@ function Router() {
   }, [locationKey, route])
 
   const Page = route ? route.Component : NotFoundPage
+  if (path === '/ipod' && route) return <Page />
+
   return (
     <Layout
       path={path}

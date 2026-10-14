@@ -23,6 +23,7 @@ export const apps: AppInfo[] = [
   { label: '조직도', path: '/organization', icon: 'organization', tint: 'steel' },
   { label: '지원 안내', path: '/recruit', icon: 'recruit', tint: 'peach' },
   { label: '로그인', path: '/login', icon: 'login', tint: 'lime' },
+  { label: 'iPod', path: '/ipod', icon: 'activities', tint: 'steel' },
 ]
 
 /** 등록되지 않은 주소에서 열리는 오류 앱 */

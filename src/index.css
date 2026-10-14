@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@700&family=Noto+Serif+KR:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@700&family=Noto+Serif+KR:wght@400;700&family=Press+Start+2P&display=swap');
 
 /* 디자인 토큰 — Dell 1996 한국어 적응판 (docs/DESIGN.md)
    색상·폰트는 반드시 아래 변수로 사용합니다. (AGENTS.md 참조)
@@ -24,11 +24,17 @@
   --color-tint-sky: #9ab6c8;
   --color-tint-steel: #a5b8c0;
   --color-tint-periwinkle: #8c9ae0;
+  --color-ipod-gloss: #f7fafc;
+  --color-ipod-silver: #c8d0d6;
+  --color-ipod-sky: #4c9fd1;
+  --color-ipod-sky-highlight: #9ed8f5;
+  --color-ipod-sky-shadow: #2477aa;
 
   /* 폰트 — 영문은 1996 시스템 폰트, 한글은 같은 역할의 웹폰트 */
   --font-display: 'Arial Black', 'Black Han Sans', sans-serif;
   --font-ui: Helvetica, Arial, 'Noto Sans KR', sans-serif;
   --font-body: 'Times New Roman', Times, 'Noto Serif KR', serif;
+  --font-pixel: 'Press Start 2P', 'Courier New', Courier, monospace;
 
   /* 간격 */
   --space-xxs: 2px;
